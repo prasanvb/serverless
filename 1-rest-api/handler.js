@@ -1,17 +1,23 @@
 "use strict";
 
 module.exports.helloWorld = (event, context, callback) => {
-  console.log({ event, context });
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  // console.log({ event, context });
   const response = {
     statusCode: 200,
     headers: {
       "Access-Control-Allow-Origin": "*", // Required for CORS support to work
     },
     body: JSON.stringify({
-      message: "Go Serverless v1.0! Your function executed successfully!",
+      message: "Rest Api function executed successfully!",
       input: event,
     }),
   };
 
   callback(null, response);
+
+  setTimeout(function () {
+    console.log("Timeout completed.");
+  }, 5000);
 };
