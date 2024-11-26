@@ -1,0 +1,77 @@
+org: prasanvb
+app: serverless
+service: serverless-dynamodb
+
+stages:
+  # Disable Serverless Framework Observability
+  default:
+    observability: false
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: 'dev'
+  region: 'us-west-2'
+  memorySize: 512
+  # default timeout of the API gateway is 30 sec
+  timeout: 30
+  # Mitigate Error: CREATE_FAILED: CustomApiGatewayAccountCloudWatchRole (Custom::ApiGatewayAccountRole)
+  logs:
+    restApi: 
+      accessLogging: false
+      executionLogging: false
+
+functions:
+  createUser:
+    handler: functions/user/user.handler
+    description: "Create a new user"
+    events:
+      - http:
+          path: user
+          method: post
+          cors: true
+
+plugins:
+  - serverless-offline
+
+custom:
+  usersTableName: usersTable-${opt:stage, self:provider.stage}
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.usersTableName}
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+          - AttributeName: country
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        BillingMode: PROVISIONED
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 10
+        GlobalSecondaryIndexes:
+          - IndexName: createdAtIndex
+            KeySchema:
+              - AttributeName: country
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection: 
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 10    
+              
+
+             
+        
