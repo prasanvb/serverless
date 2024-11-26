@@ -1,4 +1,4 @@
-module.exports.handler = async (event, context) => {
+module.exports.createUser = async (event, context) => {
   console.log({ event, context });
 
   const response = {

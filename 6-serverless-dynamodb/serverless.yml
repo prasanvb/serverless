@@ -25,7 +25,7 @@ provider:
 
 functions:
   createUser:
-    handler: functions/user/user.handler
+    handler: functions/user/handler.createUser
     description: "Create a new user"
     events:
       - http:
