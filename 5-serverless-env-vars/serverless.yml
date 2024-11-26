@@ -1,0 +1,32 @@
+org: prasanvb
+app: serverless
+service: serverless-env-var
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: 'dev'
+  region: 'us-west-2'
+  memorySize: 512
+  # default timeout of the API gateway is 30 sec
+  timeout: 30
+  # Mitigate Error: CREATE_FAILED: CustomApiGatewayAccountCloudWatchRole (Custom::ApiGatewayAccountRole)
+  logs:
+    restApi: 
+      accessLogging: false
+      executionLogging: false
+
+
+functions:
+  createUser:
+    handler: functions/user/user.handler
+    description: "Create a new user"
+    events:
+      - http:
+          path: user
+          method: post
+          cors: true
+
+plugins:
+  - serverless-offline

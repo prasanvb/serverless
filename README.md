@@ -18,7 +18,7 @@
     - function that you can call in non-async handlers to send a response
     - Response compatible with JSON.stringify.
 
-### Sample Event Object
+### Sample Event Object REST API
 
 ```js
 
@@ -85,7 +85,7 @@
   }
 ```
 
-### Sample Context Object
+### Sample Context Object REST API
 
 ```js
   context: {
