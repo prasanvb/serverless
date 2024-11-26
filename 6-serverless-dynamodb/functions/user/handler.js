@@ -1,17 +1,10 @@
-module.exports.createUser = async (event, context) => {
-  console.log({ event, context });
+import { success } from "../utils/response.js";
 
-  const response = {
-    statusCode: 200,
-    isBase64Encoded: false,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-    body: JSON.stringify({
-      message: "Hello from the user function - dynamodb",
-      inputEvent: event,
-    }),
-  };
+export const createUser = async (event, context) => {
+  const { USERS_TABLE } = process.env;
+  const body = JSON.parse(event?.body);
 
-  return response;
+  console.log({ USERS_TABLE, body });
+
+  return success;
 };

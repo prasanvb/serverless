@@ -17,6 +17,8 @@ provider:
   memorySize: 512
   # default timeout of the API gateway is 30 sec
   timeout: 30
+  environment:
+    USERS_TABLE: ${self:custom.usersTableName}
   # Mitigate Error: CREATE_FAILED: CustomApiGatewayAccountCloudWatchRole (Custom::ApiGatewayAccountRole)
   logs:
     restApi: 
