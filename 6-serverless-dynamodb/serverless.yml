@@ -108,10 +108,13 @@ resources:
                 - Effect: "Allow"
                   Action:
                     - "dynamodb:*"
+                    - "dynamodb:ListTables"
+                    - "dynamodb:PutItem"
                   Resource: "arn:aws:dynamodb:*:*:table/*"
                 - Effect: "Allow"
                   Action:
                     - "dynamodb:ListTables"
+                    - "dynamodb:PutItem"
                   Resource: "*"
         Path: "/"
         RoleName: "LambdaDynamoDBFullAccessRole"

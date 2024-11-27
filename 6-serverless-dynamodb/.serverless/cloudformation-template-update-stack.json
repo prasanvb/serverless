@@ -130,7 +130,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732690257953-2024-11-27T06:50:57.953Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732723727878-2024-11-27T16:08:47.878Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.createUser",
         "Runtime": "nodejs18.x",
@@ -155,14 +155,14 @@
         "customRole"
       ]
     },
-    "CreateUserLambdaVersionfPjFBmaXDZYojp2BX30gNtCiZBHI6uvwoZLt5Jv9A": {
+    "CreateUserLambdaVersionnh42jQqzqEpTz1StizC7kyYO0WwP8lJLaYMYOTSzvtc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateUserLambdaFunction"
         },
-        "CodeSha256": "a9cvi0TNxmUtDn4qE01mrM+Pe/knM47MIVgjATXlisY=",
+        "CodeSha256": "nRj6lTFZUfOnW3o6p6qR4N1QupiIvtWRdLCNeLNnlbI=",
         "Description": "Create a new user"
       }
     },
@@ -284,7 +284,7 @@
         "CreateUserLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1732690249320": {
+    "ApiGatewayDeployment1732723718698": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -440,14 +440,17 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "dynamodb:*"
+                    "dynamodb:*",
+                    "dynamodb:ListTables",
+                    "dynamodb:PutItem"
                   ],
                   "Resource": "arn:aws:dynamodb:*:*:table/*"
                 },
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "dynamodb:ListTables"
+                    "dynamodb:ListTables",
+                    "dynamodb:PutItem"
                   ],
                   "Resource": "*"
                 }
@@ -483,7 +486,7 @@
     "CreateUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateUserLambdaVersionfPjFBmaXDZYojp2BX30gNtCiZBHI6uvwoZLt5Jv9A"
+        "Ref": "CreateUserLambdaVersionnh42jQqzqEpTz1StizC7kyYO0WwP8lJLaYMYOTSzvtc"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-CreateUserLambdaFunctionQualifiedArn"
