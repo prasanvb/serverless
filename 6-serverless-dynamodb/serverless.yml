@@ -34,6 +34,7 @@ functions:
           path: user
           method: post
           cors: true
+    role: customRole
 
 plugins:
   - serverless-offline
@@ -73,7 +74,44 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 5
               WriteCapacityUnits: 10    
-              
-
-             
-        
+    customRole: 
+      Type: "AWS::IAM::Role"
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Service:
+                  - "lambda.amazonaws.com"
+              Action:
+                - "sts:AssumeRole"
+        Policies:
+          - PolicyName: "LambdaDynamoDBFullAccess"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                    - "logs:CreateLogGroup"
+                    - "logs:CreateLogStream"
+                    - "logs:PutLogEvents"                    
+                  # arn:aws:lambda:us-west-2:980921714626:function:serverless-dynamodb-dev-createUser
+                  Resource: 
+                    - "Fn::Join":
+                      - ":"
+                      - 
+                        - "arn:aws:logs"
+                        - Ref: "AWS::Region"
+                        - Ref: "AWS::AccountId"
+                        - "log-group:/aws/lambda/*:*:*"
+                - Effect: "Allow"
+                  Action:
+                    - "dynamodb:*"
+                  Resource: "arn:aws:dynamodb:*:*:table/*"
+                - Effect: "Allow"
+                  Action:
+                    - "dynamodb:ListTables"
+                  Resource: "*"
+        Path: "/"
+        RoleName: "LambdaDynamoDBFullAccessRole"

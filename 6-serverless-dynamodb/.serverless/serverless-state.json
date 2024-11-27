@@ -101,84 +101,6 @@
               "LogGroupName": "/aws/lambda/serverless-dynamodb-dev-createUser"
             }
           },
-          "IamRoleLambdaExecution": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "serverless-dynamodb",
-                        "dev",
-                        "lambda"
-                      ]
-                    ]
-                  },
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:CreateLogStream",
-                          "logs:CreateLogGroup",
-                          "logs:TagResource"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/serverless-dynamodb-dev*:*"
-                          }
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:PutLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/serverless-dynamodb-dev*:*:*"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "Path": "/",
-              "RoleName": {
-                "Fn::Join": [
-                  "-",
-                  [
-                    "serverless-dynamodb",
-                    "dev",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    "lambdaRole"
-                  ]
-                ]
-              }
-            }
-          },
           "EnterpriseLogAccessIamRole": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -232,7 +154,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-dynamodb/dev/1732684796901-2024-11-27T05:19:56.901Z/serverless-dynamodb.zip"
+                "S3Key": "serverless/serverless-dynamodb/dev/1732690257953-2024-11-27T06:50:57.953Z/serverless-dynamodb.zip"
               },
               "Handler": "functions/user/handler.createUser",
               "Runtime": "nodejs18.x",
@@ -247,23 +169,24 @@
               },
               "Role": {
                 "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
+                  "customRole",
                   "Arn"
                 ]
               }
             },
             "DependsOn": [
-              "CreateUserLogGroup"
+              "CreateUserLogGroup",
+              "customRole"
             ]
           },
-          "CreateUserLambdaVersionxSrFYLO7Vu3kocEzSk9TTrdsYBuF4D4d0gxpaA": {
+          "CreateUserLambdaVersionfPjFBmaXDZYojp2BX30gNtCiZBHI6uvwoZLt5Jv9A": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateUserLambdaFunction"
               },
-              "CodeSha256": "Hrcq3i2zqNvbxgp+awCfIRPxYhXCLKFjiWkoPrKYU2I=",
+              "CodeSha256": "a9cvi0TNxmUtDn4qE01mrM+Pe/knM47MIVgjATXlisY=",
               "Description": "Create a new user"
             }
           },
@@ -385,7 +308,7 @@
               "CreateUserLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1732684788119": {
+          "ApiGatewayDeployment1732690249320": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -487,6 +410,78 @@
                 }
               ]
             }
+          },
+          "customRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": "LambdaDynamoDBFullAccess",
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogGroup",
+                          "logs:CreateLogStream",
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Join": [
+                              ":",
+                              [
+                                "arn:aws:logs",
+                                {
+                                  "Ref": "AWS::Region"
+                                },
+                                {
+                                  "Ref": "AWS::AccountId"
+                                },
+                                "log-group:/aws/lambda/*:*:*"
+                              ]
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "dynamodb:*"
+                        ],
+                        "Resource": "arn:aws:dynamodb:*:*:table/*"
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "dynamodb:ListTables"
+                        ],
+                        "Resource": "*"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": "LambdaDynamoDBFullAccessRole"
+            }
           }
         },
         "Outputs": {
@@ -512,7 +507,7 @@
           "CreateUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateUserLambdaVersionxSrFYLO7Vu3kocEzSk9TTrdsYBuF4D4d0gxpaA"
+              "Ref": "CreateUserLambdaVersionfPjFBmaXDZYojp2BX30gNtCiZBHI6uvwoZLt5Jv9A"
             },
             "Export": {
               "Name": "sls-serverless-dynamodb-dev-CreateUserLambdaFunctionQualifiedArn"
@@ -667,13 +662,14 @@
             }
           }
         ],
+        "role": "customRole",
         "name": "serverless-dynamodb-dev-createUser",
         "package": {},
         "memory": 512,
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CreateUserLambdaVersionxSrFYLO7Vu3kocEzSk9TTrdsYBuF4D4d0gxpaA"
+        "versionLogicalId": "CreateUserLambdaVersionfPjFBmaXDZYojp2BX30gNtCiZBHI6uvwoZLt5Jv9A"
       }
     },
     "resources": {
@@ -730,6 +726,78 @@
               }
             ]
           }
+        },
+        "customRole": {
+          "Type": "AWS::IAM::Role",
+          "Properties": {
+            "AssumeRolePolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "Service": [
+                      "lambda.amazonaws.com"
+                    ]
+                  },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+              ]
+            },
+            "Policies": [
+              {
+                "PolicyName": "LambdaDynamoDBFullAccess",
+                "PolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:CreateLogGroup",
+                        "logs:CreateLogStream",
+                        "logs:PutLogEvents"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn:aws:logs",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              "log-group:/aws/lambda/*:*:*"
+                            ]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:*"
+                      ],
+                      "Resource": "arn:aws:dynamodb:*:*:table/*"
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:ListTables"
+                      ],
+                      "Resource": "*"
+                    }
+                  ]
+                }
+              }
+            ],
+            "Path": "/",
+            "RoleName": "LambdaDynamoDBFullAccessRole"
+          }
         }
       },
       "Outputs": {}
@@ -772,7 +840,7 @@
     "artifact": "/Users/prasanv/repos/serverless/6-serverless-dynamodb/.serverless/serverless-dynamodb.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/serverless-dynamodb/dev/1732684796901-2024-11-27T05:19:56.901Z",
+    "artifactDirectoryName": "serverless/serverless-dynamodb/dev/1732690257953-2024-11-27T06:50:57.953Z",
     "artifact": "serverless-dynamodb.zip"
   }
 }
