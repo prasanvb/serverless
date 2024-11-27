@@ -232,7 +232,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-dynamodb/dev/1732604128273-2024-11-26T06:55:28.273Z/serverless-dynamodb.zip"
+                "S3Key": "serverless/serverless-dynamodb/dev/1732684796901-2024-11-27T05:19:56.901Z/serverless-dynamodb.zip"
               },
               "Handler": "functions/user/handler.createUser",
               "Runtime": "nodejs18.x",
@@ -256,14 +256,14 @@
               "CreateUserLogGroup"
             ]
           },
-          "CreateUserLambdaVersionqV8uTLK1yjgrEDqTYGd8wCeVkhHiPM1xXV3X0kY": {
+          "CreateUserLambdaVersionxSrFYLO7Vu3kocEzSk9TTrdsYBuF4D4d0gxpaA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateUserLambdaFunction"
               },
-              "CodeSha256": "yD4ku/YNZ2Mc6Kkj9uMgVj0iTNsxq7jiV1dJCANJyG8=",
+              "CodeSha256": "Hrcq3i2zqNvbxgp+awCfIRPxYhXCLKFjiWkoPrKYU2I=",
               "Description": "Create a new user"
             }
           },
@@ -385,7 +385,7 @@
               "CreateUserLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1732604120462": {
+          "ApiGatewayDeployment1732684788119": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -512,7 +512,7 @@
           "CreateUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateUserLambdaVersionqV8uTLK1yjgrEDqTYGd8wCeVkhHiPM1xXV3X0kY"
+              "Ref": "CreateUserLambdaVersionxSrFYLO7Vu3kocEzSk9TTrdsYBuF4D4d0gxpaA"
             },
             "Export": {
               "Name": "sls-serverless-dynamodb-dev-CreateUserLambdaFunctionQualifiedArn"
@@ -673,7 +673,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CreateUserLambdaVersionqV8uTLK1yjgrEDqTYGd8wCeVkhHiPM1xXV3X0kY"
+        "versionLogicalId": "CreateUserLambdaVersionxSrFYLO7Vu3kocEzSk9TTrdsYBuF4D4d0gxpaA"
       }
     },
     "resources": {
@@ -772,7 +772,7 @@
     "artifact": "/Users/prasanv/repos/serverless/6-serverless-dynamodb/.serverless/serverless-dynamodb.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/serverless-dynamodb/dev/1732604128273-2024-11-26T06:55:28.273Z",
+    "artifactDirectoryName": "serverless/serverless-dynamodb/dev/1732684796901-2024-11-27T05:19:56.901Z",
     "artifact": "serverless-dynamodb.zip"
   }
 }

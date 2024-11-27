@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "serverless-offline": "^14.3.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.699.0"
   }
 }
