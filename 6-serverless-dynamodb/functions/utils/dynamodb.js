@@ -31,7 +31,8 @@ export const getUserRecord = async (email, tableName) => {
     Key: {
       email: { S: email }, // Replace with your partition key value
     },
-    ReturnConsumedCapacity: TOTAL,
+    // ProjectionExpression: "STRING_VALUE",
+    ReturnConsumedCapacity: "TOTAL",
     ConsistentRead: false,
   };
 
@@ -39,9 +40,9 @@ export const getUserRecord = async (email, tableName) => {
     const command = new GetItemCommand(params);
     const response = await client.send(command);
 
-    console.log("Item retrieved successfully:", response.Item);
+    console.log("Item retrieved successfully:", response);
 
-    return response.Item;
+    return response;
   } catch (error) {
     console.error("Error retrieving item:", error);
     throw error;
