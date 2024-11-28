@@ -1,4 +1,4 @@
-import { DynamoDBClient, ListTablesCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, ListTablesCommand, PutItemCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
 
 const config = {
   region: "us-west-2",
@@ -6,7 +6,7 @@ const config = {
 
 const client = new DynamoDBClient(config);
 
-export const ListTables = async (item, tableName) => {
+export const ListTables = async () => {
   try {
     const input = {};
     const command = new ListTablesCommand(input);
@@ -19,27 +19,48 @@ export const ListTables = async (item, tableName) => {
   }
 };
 
-export const createUserRecord = async (item, tableName) => {
+export const getUserRecord = async (email, tableName) => {
+  const params = {
+    TableName: tableName,
+    Key: {
+      email: { S: email }, // Replace with your partition key value
+    },
+  };
+
   try {
-    const timeStamp = new Date().toISOString();
+    const command = new GetItemCommand(params);
+    const response = await client.send(command);
 
-    // Ensure `item` attributes are correctly formatted
-    const formattedItem = Object.entries(item).reduce((acc, [key, value]) => {
-      acc[key] = { S: String(value) }; // Assuming all values are strings; adjust for numbers or other types
-      return acc;
-    }, {});
+    console.log("Item retrieved successfully:", response.Item);
 
-    // Add createdAt and updatedAt timestamps
-    formattedItem.createdAt = { S: timeStamp };
-    formattedItem.updatedAt = { S: timeStamp };
+    return response.Item;
+  } catch (error) {
+    console.error("Error retrieving item:", error);
+    throw error;
+  }
+};
 
-    const params = {
-      TableName: tableName,
-      Item: formattedItem,
-    };
+export const createUserRecord = async (item, tableName) => {
+  const timeStamp = new Date().toISOString();
 
-    console.log({ params });
+  // Ensure `item` attributes are correctly formatted
+  const formattedItem = Object.entries(item).reduce((acc, [key, value]) => {
+    acc[key] = { S: String(value) }; // Assuming all values are strings; adjust for numbers or other types
+    return acc;
+  }, {});
 
+  // Add createdAt and updatedAt timestamps
+  formattedItem.createdAt = { S: timeStamp };
+  formattedItem.updatedAt = { S: timeStamp };
+
+  const params = {
+    TableName: tableName,
+    Item: formattedItem,
+  };
+
+  console.log({ params });
+
+  try {
     const command = new PutItemCommand(params);
     const response = await client.send(command);
 

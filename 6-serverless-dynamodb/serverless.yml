@@ -1,11 +1,7 @@
-org: prasanvb
-app: serverless
+# Commented the app and org Settings to disable Serverless Framework Observability
+# org: prasanvb
+# app: serverless
 service: serverless-dynamodb
-
-stages:
-  # Disable Serverless Framework Observability
-  default:
-    observability: false
 
 frameworkVersion: '3'
 
@@ -26,6 +22,7 @@ provider:
       executionLogging: false
 
 functions:
+  # url: https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user
   createUser:
     handler: functions/user/handler.createUser
     description: "Create a new user"
@@ -33,6 +30,15 @@ functions:
       - http:
           path: user
           method: post
+          cors: true
+    role: customRole
+  getUser:
+    handler: functions/user/handler.getUser
+    description: "Get user by email"
+    events:
+      - http:
+          path: user/{email}
+          method: get
           cors: true
     role: customRole
 
@@ -77,6 +83,8 @@ resources:
     customRole: 
       Type: "AWS::IAM::Role"
       Properties:
+        Path: "/"
+        RoleName: "LambdaDynamoDBFullAccessRole"
         AssumeRolePolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -110,11 +118,11 @@ resources:
                     - "dynamodb:*"
                     - "dynamodb:ListTables"
                     - "dynamodb:PutItem"
+                    - "dynamodb:GetItem"
                   Resource: "arn:aws:dynamodb:*:*:table/*"
                 - Effect: "Allow"
                   Action:
                     - "dynamodb:ListTables"
                     - "dynamodb:PutItem"
                   Resource: "*"
-        Path: "/"
-        RoleName: "LambdaDynamoDBFullAccessRole"
+        
