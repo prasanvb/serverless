@@ -1,10 +1,5 @@
-import {
-  DynamoDBClient,
-  ListTablesCommand,
-  PutItemCommand,
-  GetItemCommand,
-  ReturnConsumedCapacity,
-} from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, ListTablesCommand, PutItemCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
+import { unmarshall, marshall } from "@aws-sdk/util-dynamodb";
 
 const config = {
   region: "us-west-2",
@@ -42,7 +37,7 @@ export const getUserRecord = async (email, tableName) => {
 
     console.log("Item retrieved successfully:", response);
 
-    return response;
+    return { Item: unmarshall(response.Item), ConsumedCapacity: response.ConsumedCapacity };
   } catch (error) {
     console.error("Error retrieving item:", error);
     throw error;
@@ -51,20 +46,10 @@ export const getUserRecord = async (email, tableName) => {
 
 export const createUserRecord = async (item, tableName) => {
   const timeStamp = new Date().toISOString();
-
-  // Ensure `item` attributes are correctly formatted
-  const formattedItem = Object.entries(item).reduce((acc, [key, value]) => {
-    acc[key] = { S: String(value) }; // Assuming all values are strings; adjust for numbers or other types
-    return acc;
-  }, {});
-
-  // Add createdAt and updatedAt timestamps
-  formattedItem.createdAt = { S: timeStamp };
-  formattedItem.updatedAt = { S: timeStamp };
-
+  const data = { ...item, createdAt: timeStamp, updatedAt: timeStamp };
   const params = {
     TableName: tableName,
-    Item: formattedItem,
+    Item: marshall(data),
   };
 
   console.log({ params });

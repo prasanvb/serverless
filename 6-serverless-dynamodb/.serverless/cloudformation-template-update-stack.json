@@ -90,7 +90,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732765773268-2024-11-28T03:49:33.268Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732774318658-2024-11-28T06:11:58.658Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.createUser",
         "Runtime": "nodejs18.x",
@@ -122,7 +122,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732765773268-2024-11-28T03:49:33.268Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732774318658-2024-11-28T06:11:58.658Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.getUser",
         "Runtime": "nodejs18.x",
@@ -147,25 +147,25 @@
         "customRole"
       ]
     },
-    "CreateUserLambdaVersion4rA4HJPXdEK0dytxincs2guQbNIw2dsOb2jEJFP9w": {
+    "CreateUserLambdaVersionjXemcS4QDbnRtUT26Oh8R5u0OzdBUNl32Gng7FF3kkg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateUserLambdaFunction"
         },
-        "CodeSha256": "aaQz7o3/Oy1d2H6xU41wSNq258P9F3BMTPGZ0prPaCM=",
+        "CodeSha256": "dLdIx0eUccHwV0Qg6PXhW8zldDdbsjVytaps/ue9+jQ=",
         "Description": "Create a new user"
       }
     },
-    "GetUserLambdaVersionsIPP6LMEuLq69YMddBI8dFHn3eBw8MjooAFwU78eVk": {
+    "GetUserLambdaVersionJ53oBYQSpT2c23ozY9nbcEhw2cWeqiSgJJ4c56fB8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetUserLambdaFunction"
         },
-        "CodeSha256": "aaQz7o3/Oy1d2H6xU41wSNq258P9F3BMTPGZ0prPaCM=",
+        "CodeSha256": "dLdIx0eUccHwV0Qg6PXhW8zldDdbsjVytaps/ue9+jQ=",
         "Description": "Get user by email"
       }
     },
@@ -390,7 +390,7 @@
         "GetUserLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1732765768195": {
+    "ApiGatewayDeployment1732774312902": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -621,7 +621,7 @@
     "CreateUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateUserLambdaVersion4rA4HJPXdEK0dytxincs2guQbNIw2dsOb2jEJFP9w"
+        "Ref": "CreateUserLambdaVersionjXemcS4QDbnRtUT26Oh8R5u0OzdBUNl32Gng7FF3kkg"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-CreateUserLambdaFunctionQualifiedArn"
@@ -630,7 +630,7 @@
     "GetUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetUserLambdaVersionsIPP6LMEuLq69YMddBI8dFHn3eBw8MjooAFwU78eVk"
+        "Ref": "GetUserLambdaVersionJ53oBYQSpT2c23ozY9nbcEhw2cWeqiSgJJ4c56fB8"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-GetUserLambdaFunctionQualifiedArn"
