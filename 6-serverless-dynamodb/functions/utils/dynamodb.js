@@ -1,4 +1,10 @@
-import { DynamoDBClient, ListTablesCommand, PutItemCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
+import {
+  DynamoDBClient,
+  ListTablesCommand,
+  PutItemCommand,
+  GetItemCommand,
+  QueryCommand,
+} from "@aws-sdk/client-dynamodb";
 import { unmarshall, marshall } from "@aws-sdk/util-dynamodb";
 
 const config = {
@@ -62,5 +68,32 @@ export const createUserRecord = async (item, tableName) => {
   } catch (err) {
     console.error("PutItemCommand error", { err });
     return err;
+  }
+};
+
+export const queryUserRecords = async (item, tableName) => {
+  console.log("queryUserRecords", { item, tableName });
+  const { email, country } = item;
+
+  const params = {
+    TableName: tableName, // Replace with your table name
+    KeyConditionExpression: "email = :email", // Partition key condition
+    FilterExpression: "country = :country", // Filter on a non-key attribute
+    ExpressionAttributeValues: {
+      ":email": { S: email },
+      ":country": { S: country },
+    },
+  };
+
+  try {
+    const command = new QueryCommand(params);
+    const response = await client.send(command);
+    const items = response.Items?.map((item) => unmarshall(item)) || [];
+
+    console.log("Filtered Items:", items);
+    return items;
+  } catch (error) {
+    console.error("Error querying items by attribute:", error);
+    throw error;
   }
 };

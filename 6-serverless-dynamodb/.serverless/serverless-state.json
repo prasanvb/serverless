@@ -106,6 +106,12 @@
               "LogGroupName": "/aws/lambda/serverless-dynamodb-dev-getUser"
             }
           },
+          "QueryUsersLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/serverless-dynamodb-dev-queryUsers"
+            }
+          },
           "CreateUserLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -113,7 +119,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-dynamodb/dev/1732774318658-2024-11-28T06:11:58.658Z/serverless-dynamodb.zip"
+                "S3Key": "serverless/serverless-dynamodb/dev/1732776814475-2024-11-28T06:53:34.475Z/serverless-dynamodb.zip"
               },
               "Handler": "functions/user/handler.createUser",
               "Runtime": "nodejs18.x",
@@ -145,7 +151,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-dynamodb/dev/1732774318658-2024-11-28T06:11:58.658Z/serverless-dynamodb.zip"
+                "S3Key": "serverless/serverless-dynamodb/dev/1732776814475-2024-11-28T06:53:34.475Z/serverless-dynamodb.zip"
               },
               "Handler": "functions/user/handler.getUser",
               "Runtime": "nodejs18.x",
@@ -170,26 +176,69 @@
               "customRole"
             ]
           },
-          "CreateUserLambdaVersionjXemcS4QDbnRtUT26Oh8R5u0OzdBUNl32Gng7FF3kkg": {
+          "QueryUsersLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/serverless-dynamodb/dev/1732776814475-2024-11-28T06:53:34.475Z/serverless-dynamodb.zip"
+              },
+              "Handler": "functions/user/handler.queryUsers",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "serverless-dynamodb-dev-queryUsers",
+              "MemorySize": 512,
+              "Timeout": 30,
+              "Description": "Query user table",
+              "Environment": {
+                "Variables": {
+                  "USERS_TABLE": "usersTable-dev"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "customRole",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "QueryUsersLogGroup",
+              "customRole"
+            ]
+          },
+          "CreateUserLambdaVersion434YlR2PgXCBwEKP5abgVNCK6LXXoDa4CcxDrZ3wHE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateUserLambdaFunction"
               },
-              "CodeSha256": "dLdIx0eUccHwV0Qg6PXhW8zldDdbsjVytaps/ue9+jQ=",
+              "CodeSha256": "LdnFc5GqmIiBo3PYqobst5D/4qeq+lZ1tSySV7lH5pM=",
               "Description": "Create a new user"
             }
           },
-          "GetUserLambdaVersionJ53oBYQSpT2c23ozY9nbcEhw2cWeqiSgJJ4c56fB8": {
+          "GetUserLambdaVersionYwEFXSTlE0L6ikd3CtVRJwP1soMYO6FoPr7Y3GfTA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetUserLambdaFunction"
               },
-              "CodeSha256": "dLdIx0eUccHwV0Qg6PXhW8zldDdbsjVytaps/ue9+jQ=",
+              "CodeSha256": "LdnFc5GqmIiBo3PYqobst5D/4qeq+lZ1tSySV7lH5pM=",
               "Description": "Get user by email"
+            }
+          },
+          "QueryUsersLambdaVersionilUuLe2SErGLhwfioW0y6aUg3rlCBMncgXOL0mDCI": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "QueryUsersLambdaFunction"
+              },
+              "CodeSha256": "LdnFc5GqmIiBo3PYqobst5D/4qeq+lZ1tSySV7lH5pM=",
+              "Description": "Query user table"
             }
           },
           "ApiGatewayRestApi": {
@@ -226,6 +275,18 @@
                 "Ref": "ApiGatewayResourceUser"
               },
               "PathPart": "{email}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceUserQuery": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceUser"
+              },
+              "PathPart": "query",
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -315,6 +376,51 @@
               },
               "ResourceId": {
                 "Ref": "ApiGatewayResourceUserEmailVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodUserQueryOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceUserQuery"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
@@ -413,7 +519,53 @@
               "GetUserLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1732774312902": {
+          "ApiGatewayMethodUserQueryPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceUserQuery"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "QueryUsersLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "QueryUsersLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1732776809350": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -424,8 +576,10 @@
             "DependsOn": [
               "ApiGatewayMethodUserOptions",
               "ApiGatewayMethodUserEmailVarOptions",
+              "ApiGatewayMethodUserQueryOptions",
               "ApiGatewayMethodUserPost",
-              "ApiGatewayMethodUserEmailVarGet"
+              "ApiGatewayMethodUserEmailVarGet",
+              "ApiGatewayMethodUserQueryPost"
             ]
           },
           "CreateUserLambdaPermissionApiGateway": {
@@ -471,6 +625,43 @@
               "FunctionName": {
                 "Fn::GetAtt": [
                   "GetUserLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "QueryUsersLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "QueryUsersLambdaFunction",
                   "Arn"
                 ]
               },
@@ -613,17 +804,13 @@
                           "dynamodb:*",
                           "dynamodb:ListTables",
                           "dynamodb:PutItem",
-                          "dynamodb:GetItem"
+                          "dynamodb:GetItem",
+                          "dynamodb:Query"
                         ],
-                        "Resource": "arn:aws:dynamodb:*:*:table/*"
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "dynamodb:ListTables",
-                          "dynamodb:PutItem"
-                        ],
-                        "Resource": "*"
+                        "Resource": [
+                          "arn:aws:dynamodb:*:*:table/*",
+                          "arn:aws:dynamodb:*:*:table/*/index/*"
+                        ]
                       }
                     ]
                   }
@@ -644,7 +831,7 @@
           "CreateUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateUserLambdaVersionjXemcS4QDbnRtUT26Oh8R5u0OzdBUNl32Gng7FF3kkg"
+              "Ref": "CreateUserLambdaVersion434YlR2PgXCBwEKP5abgVNCK6LXXoDa4CcxDrZ3wHE"
             },
             "Export": {
               "Name": "sls-serverless-dynamodb-dev-CreateUserLambdaFunctionQualifiedArn"
@@ -653,10 +840,19 @@
           "GetUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetUserLambdaVersionJ53oBYQSpT2c23ozY9nbcEhw2cWeqiSgJJ4c56fB8"
+              "Ref": "GetUserLambdaVersionYwEFXSTlE0L6ikd3CtVRJwP1soMYO6FoPr7Y3GfTA"
             },
             "Export": {
               "Name": "sls-serverless-dynamodb-dev-GetUserLambdaFunctionQualifiedArn"
+            }
+          },
+          "QueryUsersLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "QueryUsersLambdaVersionilUuLe2SErGLhwfioW0y6aUg3rlCBMncgXOL0mDCI"
+            },
+            "Export": {
+              "Name": "sls-serverless-dynamodb-dev-QueryUsersLambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -815,7 +1011,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CreateUserLambdaVersionjXemcS4QDbnRtUT26Oh8R5u0OzdBUNl32Gng7FF3kkg"
+        "versionLogicalId": "CreateUserLambdaVersion434YlR2PgXCBwEKP5abgVNCK6LXXoDa4CcxDrZ3wHE"
       },
       "getUser": {
         "handler": "functions/user/handler.getUser",
@@ -853,7 +1049,45 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetUserLambdaVersionJ53oBYQSpT2c23ozY9nbcEhw2cWeqiSgJJ4c56fB8"
+        "versionLogicalId": "GetUserLambdaVersionYwEFXSTlE0L6ikd3CtVRJwP1soMYO6FoPr7Y3GfTA"
+      },
+      "queryUsers": {
+        "handler": "functions/user/handler.queryUsers",
+        "description": "Query user table",
+        "events": [
+          {
+            "http": {
+              "path": "user/query",
+              "method": "post",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "role": "customRole",
+        "name": "serverless-dynamodb-dev-queryUsers",
+        "package": {},
+        "memory": 512,
+        "timeout": 30,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "QueryUsersLambdaVersionilUuLe2SErGLhwfioW0y6aUg3rlCBMncgXOL0mDCI"
       }
     },
     "resources": {
@@ -969,17 +1203,13 @@
                         "dynamodb:*",
                         "dynamodb:ListTables",
                         "dynamodb:PutItem",
-                        "dynamodb:GetItem"
+                        "dynamodb:GetItem",
+                        "dynamodb:Query"
                       ],
-                      "Resource": "arn:aws:dynamodb:*:*:table/*"
-                    },
-                    {
-                      "Effect": "Allow",
-                      "Action": [
-                        "dynamodb:ListTables",
-                        "dynamodb:PutItem"
-                      ],
-                      "Resource": "*"
+                      "Resource": [
+                        "arn:aws:dynamodb:*:*:table/*",
+                        "arn:aws:dynamodb:*:*:table/*/index/*"
+                      ]
                     }
                   ]
                 }
@@ -1016,7 +1246,7 @@
     "artifact": "/Users/prasanv/repos/serverless/6-serverless-dynamodb/.serverless/serverless-dynamodb.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/serverless-dynamodb/dev/1732774318658-2024-11-28T06:11:58.658Z",
+    "artifactDirectoryName": "serverless/serverless-dynamodb/dev/1732776814475-2024-11-28T06:53:34.475Z",
     "artifact": "serverless-dynamodb.zip"
   }
 }

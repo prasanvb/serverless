@@ -32,6 +32,7 @@ functions:
           method: post
           cors: true
     role: customRole
+  # https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user/prasan@gmail.com
   getUser:
     handler: functions/user/handler.getUser
     description: "Get user by email"
@@ -39,6 +40,15 @@ functions:
       - http:
           path: user/{email}
           method: get
+          cors: true
+    role: customRole
+  queryUsers:
+    handler: functions/user/handler.queryUsers
+    description: "Query user table"
+    events:
+      - http:
+          path: user/query
+          method: post
           cors: true
     role: customRole
 
@@ -104,8 +114,8 @@ resources:
                     - "logs:CreateLogGroup"
                     - "logs:CreateLogStream"
                     - "logs:PutLogEvents"                    
-                  # arn:aws:lambda:us-west-2:980921714626:function:serverless-dynamodb-dev-createUser
                   Resource: 
+                    # arn:aws:logs:us-west-2:980921714626:log-group:/aws/lambda/*:*:*
                     - "Fn::Join":
                       - ":"
                       - 
@@ -115,14 +125,14 @@ resources:
                         - "log-group:/aws/lambda/*:*:*"
                 - Effect: "Allow"
                   Action:
-                    - "dynamodb:*"
+                    - "dynamodb:*"  
                     - "dynamodb:ListTables"
                     - "dynamodb:PutItem"
                     - "dynamodb:GetItem"
-                  Resource: "arn:aws:dynamodb:*:*:table/*"
-                - Effect: "Allow"
-                  Action:
-                    - "dynamodb:ListTables"
-                    - "dynamodb:PutItem"
-                  Resource: "*"
+                    - "dynamodb:Query"
+                  Resource: 
+                  # Allow querying the base table and the GSI
+                  # arn:aws:dynamodb:us-west-2:123456789012:table/YourTableName/index/YourGSIName
+                    - "arn:aws:dynamodb:*:*:table/*"
+                    - "arn:aws:dynamodb:*:*:table/*/index/*"
         
