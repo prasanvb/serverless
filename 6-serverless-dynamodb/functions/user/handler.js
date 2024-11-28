@@ -6,7 +6,12 @@ export const createUser = async (event) => {
   const body = JSON.parse(event?.body);
 
   if (!body) {
-    return;
+    return {
+      ...error,
+      body: JSON.stringify({
+        message: "event body data invalid",
+      }),
+    };
   }
 
   try {
@@ -23,8 +28,21 @@ export const createUser = async (event) => {
 
 export const getUser = async (event) => {
   const { USERS_TABLE } = process.env;
-  console.log({ event }, event.pathParameters.email);
-  const email = event?.pathParameters?.email ?? "vague@gmail.com";
+  const email = event?.pathParameters?.email;
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // schema validation
+  if (!email || !isValidEmail(email)) {
+    return {
+      ...error,
+      body: JSON.stringify({
+        message: "event path parameter invalid",
+      }),
+    };
+  }
 
   try {
     const res = await getUserRecord(email, USERS_TABLE);

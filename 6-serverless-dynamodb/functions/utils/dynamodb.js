@@ -1,4 +1,10 @@
-import { DynamoDBClient, ListTablesCommand, PutItemCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
+import {
+  DynamoDBClient,
+  ListTablesCommand,
+  PutItemCommand,
+  GetItemCommand,
+  ReturnConsumedCapacity,
+} from "@aws-sdk/client-dynamodb";
 
 const config = {
   region: "us-west-2",
@@ -25,6 +31,8 @@ export const getUserRecord = async (email, tableName) => {
     Key: {
       email: { S: email }, // Replace with your partition key value
     },
+    ReturnConsumedCapacity: TOTAL,
+    ConsistentRead: false,
   };
 
   try {

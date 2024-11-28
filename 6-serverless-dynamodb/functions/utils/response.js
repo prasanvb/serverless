@@ -4,9 +4,6 @@ export const success = {
   headers: {
     "Access-Control-Allow-Origin": "*",
   },
-  body: JSON.stringify({
-    message: "Lambda function - dynamodb",
-  }),
 };
 
 export const error = {
