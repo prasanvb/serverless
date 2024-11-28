@@ -84,6 +84,7 @@ export const queryUserRecords = async (item, tableName) => {
       ":email": { S: email },
       ":country": { S: country },
     },
+    ReturnConsumedCapacity: "TOTAL",
   };
 
   try {
@@ -92,7 +93,8 @@ export const queryUserRecords = async (item, tableName) => {
     const items = response.Items?.map((item) => unmarshall(item)) || [];
 
     console.log("queryUserRecords Items:", items);
-    return items;
+
+    return { Item: items, ConsumedCapacity: response.ConsumedCapacity };
   } catch (error) {
     console.error("Error querying items by attribute:", error);
     throw error;
