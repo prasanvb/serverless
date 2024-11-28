@@ -30,7 +30,7 @@ export const getUserRecord = async (email, tableName) => {
   const params = {
     TableName: tableName,
     Key: {
-      email: { S: email }, // Replace with your partition key value
+      email: { S: email }, //  partition key value
     },
     // ProjectionExpression: "STRING_VALUE",
     ReturnConsumedCapacity: "TOTAL",
@@ -72,13 +72,14 @@ export const createUserRecord = async (item, tableName) => {
 };
 
 export const queryUserRecords = async (item, tableName) => {
-  console.log("queryUserRecords", { item, tableName });
   const { email, country } = item;
 
+  console.log({ email, country });
+
   const params = {
-    TableName: tableName, // Replace with your table name
-    KeyConditionExpression: "email = :email", // Partition key condition
-    FilterExpression: "country = :country", // Filter on a non-key attribute
+    TableName: tableName,
+    KeyConditionExpression: "email = :email",
+    FilterExpression: "country = :country",
     ExpressionAttributeValues: {
       ":email": { S: email },
       ":country": { S: country },
@@ -90,7 +91,7 @@ export const queryUserRecords = async (item, tableName) => {
     const response = await client.send(command);
     const items = response.Items?.map((item) => unmarshall(item)) || [];
 
-    console.log("Filtered Items:", items);
+    console.log("queryUserRecords Items:", items);
     return items;
   } catch (error) {
     console.error("Error querying items by attribute:", error);
