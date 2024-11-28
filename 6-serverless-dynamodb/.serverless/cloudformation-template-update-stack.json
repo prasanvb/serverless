@@ -130,7 +130,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732723727878-2024-11-27T16:08:47.878Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732761385135-2024-11-28T02:36:25.135Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.createUser",
         "Runtime": "nodejs18.x",
@@ -155,14 +155,14 @@
         "customRole"
       ]
     },
-    "CreateUserLambdaVersionnh42jQqzqEpTz1StizC7kyYO0WwP8lJLaYMYOTSzvtc": {
+    "CreateUserLambdaVersionz4SKsXtlVQbUryWqZvB7KRH4AzgkKi5xZf9TtKVkpI": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateUserLambdaFunction"
         },
-        "CodeSha256": "nRj6lTFZUfOnW3o6p6qR4N1QupiIvtWRdLCNeLNnlbI=",
+        "CodeSha256": "AVanDDcOoLw+SPQsC6zUugKf9ZIWaU3kh997DYayWiU=",
         "Description": "Create a new user"
       }
     },
@@ -284,7 +284,7 @@
         "CreateUserLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1732723718698": {
+    "ApiGatewayDeployment1732761375237": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -486,7 +486,7 @@
     "CreateUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateUserLambdaVersionnh42jQqzqEpTz1StizC7kyYO0WwP8lJLaYMYOTSzvtc"
+        "Ref": "CreateUserLambdaVersionz4SKsXtlVQbUryWqZvB7KRH4AzgkKi5xZf9TtKVkpI"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-CreateUserLambdaFunctionQualifiedArn"

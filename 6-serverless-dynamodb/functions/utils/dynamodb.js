@@ -8,17 +8,6 @@ const client = new DynamoDBClient(config);
 
 export const ListTables = async (item, tableName) => {
   try {
-    const timeStamp = new Date().toISOString();
-    const params = {
-      TableName: tableName,
-      Item: {
-        ...item,
-        createdAt: timeStamp,
-        updatedAt: timeStamp,
-      },
-    };
-    console.log({ params, client });
-
     const input = {};
     const command = new ListTablesCommand(input);
     const response = await client.send(command);
