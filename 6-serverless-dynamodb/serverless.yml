@@ -30,7 +30,7 @@ functions:
           path: user
           method: post
           cors: true
-    role: customRole
+    role: customLambdaExecutionRole
   getUser:
     handler: functions/user/handler.getUser
     description: "Get user by email"
@@ -39,7 +39,7 @@ functions:
           path: user/{email}
           method: get
           cors: true
-    role: customRole
+    role: customLambdaExecutionRole
   # https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user/query
   queryUsers:
     handler: functions/user/handler.queryUsers
@@ -49,7 +49,7 @@ functions:
           path: user/query
           method: post
           cors: true
-    role: customRole
+    role: customLambdaExecutionRole
   # https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user/query/index
   queryUserCreatedAtIndex:
     handler: functions/user/handler.queryUserCreatedAtIndex
@@ -59,7 +59,7 @@ functions:
           path: user/query/index
           method: post
           cors: true
-    role: customRole
+    role: customLambdaExecutionRole
   # https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user/scan/index
   scanUserCreatedAtIndex:
     handler: functions/user/handler.scanUserCreatedAtIndex
@@ -69,7 +69,21 @@ functions:
           path: user/scan/index
           method: post
           cors: true
-    role: customRole
+    role: customLambdaExecutionRole
+  notifyUser:
+    handler: functions/user/handler.notifyUser
+    description: "Notify user with an email"
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt:
+              - UsersTable
+              - StreamArn
+          batchSize: 1    # Number of records the Lambda function will process at once
+          startingPosition: LATEST  # Start processing from the latest record
+          enabled: true    # Enable the event source mapping
+    role: customLambdaExecutionRole
 
 plugins:
   - serverless-offline
@@ -101,6 +115,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 10
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
         GlobalSecondaryIndexes:
           - IndexName: createdAtIndex
             KeySchema:
@@ -117,11 +133,11 @@ resources:
               WriteCapacityUnits: 10
     # Custom role is created and its assumed by lambda
     # Policy attached has 2 statements - create log group and log events and perform actions on dynamodb tables and indexes 
-    customRole: 
+    customLambdaExecutionRole: 
       Type: "AWS::IAM::Role"
       Properties:
         Path: "/"
-        RoleName: "LambdaExecutionRole"
+        RoleName: "LambdaExecRole"
         AssumeRolePolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -157,9 +173,14 @@ resources:
                     - "dynamodb:GetItem"
                     - "dynamodb:Query"
                     - "dynamodb:Scan"
+                    - "dynamodb:DescribeStream"
+                    - "dynamodb:GetRecords"
+                    - "dynamodb:GetShardIterator"
+                    - "dynamodb:ListStreams"
                   Resource: 
                   # Allow querying the base table and the Global Secondary Index
-                  # arn:aws:dynamodb:us-west-2:123456789012:table/YourTableName/index/YourGSIName
                     - "arn:aws:dynamodb:*:*:table/*"
                     - "arn:aws:dynamodb:*:*:table/*/index/*"
+                  # arn:aws:dynamodb:us-west-2:980921714626:table/usersTable-dev/stream/2024-11-29T05:48:38.695
+                    - "arn:aws:dynamodb:*:*:table/*/stream/*"
         

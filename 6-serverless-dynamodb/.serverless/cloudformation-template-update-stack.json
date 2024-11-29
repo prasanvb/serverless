@@ -101,6 +101,12 @@
         "LogGroupName": "/aws/lambda/serverless-dynamodb-dev-scanUserCreatedAtIndex"
       }
     },
+    "NotifyUserLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/serverless-dynamodb-dev-notifyUser"
+      }
+    },
     "CreateUserLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -108,7 +114,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732857103712-2024-11-29T05:11:43.712Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732860670921-2024-11-29T06:11:10.921Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.createUser",
         "Runtime": "nodejs18.x",
@@ -123,14 +129,14 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "customRole",
+            "customLambdaExecutionRole",
             "Arn"
           ]
         }
       },
       "DependsOn": [
         "CreateUserLogGroup",
-        "customRole"
+        "customLambdaExecutionRole"
       ]
     },
     "GetUserLambdaFunction": {
@@ -140,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732857103712-2024-11-29T05:11:43.712Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732860670921-2024-11-29T06:11:10.921Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.getUser",
         "Runtime": "nodejs18.x",
@@ -155,14 +161,14 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "customRole",
+            "customLambdaExecutionRole",
             "Arn"
           ]
         }
       },
       "DependsOn": [
         "GetUserLogGroup",
-        "customRole"
+        "customLambdaExecutionRole"
       ]
     },
     "QueryUsersLambdaFunction": {
@@ -172,7 +178,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732857103712-2024-11-29T05:11:43.712Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732860670921-2024-11-29T06:11:10.921Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.queryUsers",
         "Runtime": "nodejs18.x",
@@ -187,14 +193,14 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "customRole",
+            "customLambdaExecutionRole",
             "Arn"
           ]
         }
       },
       "DependsOn": [
         "QueryUsersLogGroup",
-        "customRole"
+        "customLambdaExecutionRole"
       ]
     },
     "QueryUserCreatedAtIndexLambdaFunction": {
@@ -204,7 +210,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732857103712-2024-11-29T05:11:43.712Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732860670921-2024-11-29T06:11:10.921Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.queryUserCreatedAtIndex",
         "Runtime": "nodejs18.x",
@@ -219,14 +225,14 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "customRole",
+            "customLambdaExecutionRole",
             "Arn"
           ]
         }
       },
       "DependsOn": [
         "QueryUserCreatedAtIndexLogGroup",
-        "customRole"
+        "customLambdaExecutionRole"
       ]
     },
     "ScanUserCreatedAtIndexLambdaFunction": {
@@ -236,7 +242,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732857103712-2024-11-29T05:11:43.712Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732860670921-2024-11-29T06:11:10.921Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.scanUserCreatedAtIndex",
         "Runtime": "nodejs18.x",
@@ -251,69 +257,112 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "customRole",
+            "customLambdaExecutionRole",
             "Arn"
           ]
         }
       },
       "DependsOn": [
         "ScanUserCreatedAtIndexLogGroup",
-        "customRole"
+        "customLambdaExecutionRole"
       ]
     },
-    "CreateUserLambdaVersionDFCELyHt86dPEoMDXjF2M8CguBpZLkB3Q83e8lNBr7g": {
+    "NotifyUserLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/serverless-dynamodb/dev/1732860670921-2024-11-29T06:11:10.921Z/serverless-dynamodb.zip"
+        },
+        "Handler": "functions/user/handler.notifyUser",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "serverless-dynamodb-dev-notifyUser",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Description": "Notify user with an email",
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "usersTable-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "customLambdaExecutionRole",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "NotifyUserLogGroup",
+        "customLambdaExecutionRole"
+      ]
+    },
+    "CreateUserLambdaVersionew7muHSkWVz2LoNOI1Ka1wop5suK4jEwYkk8pwCqPc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateUserLambdaFunction"
         },
-        "CodeSha256": "cbPn7AljXfEk6yjdtLeV6o6ag2jo/2AlDMK3eNtCtY4=",
+        "CodeSha256": "IYvUwL+kyCerChrDxDKTyGzCdtwPUgV4/+FZNJEU7SI=",
         "Description": "Create a new user"
       }
     },
-    "GetUserLambdaVersion4Iz88TgaBmTzSvPqs8uoF84KNerKDQYBfdDt2Q": {
+    "GetUserLambdaVersionNeGDONpGfdWBml2vmOKpODif9TZekyr0yVXAZ8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetUserLambdaFunction"
         },
-        "CodeSha256": "cbPn7AljXfEk6yjdtLeV6o6ag2jo/2AlDMK3eNtCtY4=",
+        "CodeSha256": "IYvUwL+kyCerChrDxDKTyGzCdtwPUgV4/+FZNJEU7SI=",
         "Description": "Get user by email"
       }
     },
-    "QueryUsersLambdaVersionPOUj0MyPsAASJcJNzDSrQNxED4oeJCMf3TH5QND1k": {
+    "QueryUsersLambdaVersionUG5BQnY7cnbMIXLAQphXEnkwCsTWVQfp4f6rmaW0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "QueryUsersLambdaFunction"
         },
-        "CodeSha256": "cbPn7AljXfEk6yjdtLeV6o6ag2jo/2AlDMK3eNtCtY4=",
+        "CodeSha256": "IYvUwL+kyCerChrDxDKTyGzCdtwPUgV4/+FZNJEU7SI=",
         "Description": "Query user table"
       }
     },
-    "QueryUserCreatedAtIndexLambdaVersionfHjfCM0tA9oeaNiVHIpux07J440AwX8EW1cmOPPI": {
+    "QueryUserCreatedAtIndexLambdaVersionruHCf8hGzHiR3F52ZEBtYFG7jF4iFkvqoZt8nPSoJkA": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "QueryUserCreatedAtIndexLambdaFunction"
         },
-        "CodeSha256": "cbPn7AljXfEk6yjdtLeV6o6ag2jo/2AlDMK3eNtCtY4=",
+        "CodeSha256": "IYvUwL+kyCerChrDxDKTyGzCdtwPUgV4/+FZNJEU7SI=",
         "Description": "Query user by createAtIndex"
       }
     },
-    "ScanUserCreatedAtIndexLambdaVersiongVFtzCT7IODLViDDFOyqgyRMTPUQz4DXk4jeLsD4": {
+    "ScanUserCreatedAtIndexLambdaVersionxnqeb5mO1JrhenEIDB0f0FbIotgKVaDGw2xCFpHm4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ScanUserCreatedAtIndexLambdaFunction"
         },
-        "CodeSha256": "cbPn7AljXfEk6yjdtLeV6o6ag2jo/2AlDMK3eNtCtY4=",
+        "CodeSha256": "IYvUwL+kyCerChrDxDKTyGzCdtwPUgV4/+FZNJEU7SI=",
         "Description": "Scan user by createAtIndex"
+      }
+    },
+    "NotifyUserLambdaVersiony35OHZlKqwdEtY54ee9UliOspr3o3PwGIbKNULGrQqM": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "NotifyUserLambdaFunction"
+        },
+        "CodeSha256": "IYvUwL+kyCerChrDxDKTyGzCdtwPUgV4/+FZNJEU7SI=",
+        "Description": "Notify user with an email"
       }
     },
     "ApiGatewayRestApi": {
@@ -858,7 +907,7 @@
         "ScanUserCreatedAtIndexLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1732857098651": {
+    "ApiGatewayDeployment1732860666107": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1064,6 +1113,29 @@
         }
       }
     },
+    "NotifyUserEventSourceMappingDynamodbUsersTable": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [
+        "customLambdaExecutionRole"
+      ],
+      "Properties": {
+        "BatchSize": 1,
+        "Enabled": true,
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "UsersTable",
+            "StreamArn"
+          ]
+        },
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "NotifyUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "StartingPosition": "LATEST"
+      }
+    },
     "UsersTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
@@ -1093,6 +1165,9 @@
           "ReadCapacityUnits": 5,
           "WriteCapacityUnits": 10
         },
+        "StreamSpecification": {
+          "StreamViewType": "NEW_AND_OLD_IMAGES"
+        },
         "GlobalSecondaryIndexes": [
           {
             "IndexName": "createdAtIndex",
@@ -1117,11 +1192,11 @@
         ]
       }
     },
-    "customRole": {
+    "customLambdaExecutionRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "Path": "/",
-        "RoleName": "LambdaExecutionRole",
+        "RoleName": "LambdaExecRole",
         "AssumeRolePolicyDocument": {
           "Version": "2012-10-17",
           "Statement": [
@@ -1176,11 +1251,16 @@
                     "dynamodb:PutItem",
                     "dynamodb:GetItem",
                     "dynamodb:Query",
-                    "dynamodb:Scan"
+                    "dynamodb:Scan",
+                    "dynamodb:DescribeStream",
+                    "dynamodb:GetRecords",
+                    "dynamodb:GetShardIterator",
+                    "dynamodb:ListStreams"
                   ],
                   "Resource": [
                     "arn:aws:dynamodb:*:*:table/*",
-                    "arn:aws:dynamodb:*:*:table/*/index/*"
+                    "arn:aws:dynamodb:*:*:table/*/index/*",
+                    "arn:aws:dynamodb:*:*:table/*/stream/*"
                   ]
                 }
               ]
@@ -1202,7 +1282,7 @@
     "CreateUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateUserLambdaVersionDFCELyHt86dPEoMDXjF2M8CguBpZLkB3Q83e8lNBr7g"
+        "Ref": "CreateUserLambdaVersionew7muHSkWVz2LoNOI1Ka1wop5suK4jEwYkk8pwCqPc"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-CreateUserLambdaFunctionQualifiedArn"
@@ -1211,7 +1291,7 @@
     "GetUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetUserLambdaVersion4Iz88TgaBmTzSvPqs8uoF84KNerKDQYBfdDt2Q"
+        "Ref": "GetUserLambdaVersionNeGDONpGfdWBml2vmOKpODif9TZekyr0yVXAZ8"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-GetUserLambdaFunctionQualifiedArn"
@@ -1220,7 +1300,7 @@
     "QueryUsersLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "QueryUsersLambdaVersionPOUj0MyPsAASJcJNzDSrQNxED4oeJCMf3TH5QND1k"
+        "Ref": "QueryUsersLambdaVersionUG5BQnY7cnbMIXLAQphXEnkwCsTWVQfp4f6rmaW0"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-QueryUsersLambdaFunctionQualifiedArn"
@@ -1229,7 +1309,7 @@
     "QueryUserCreatedAtIndexLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "QueryUserCreatedAtIndexLambdaVersionfHjfCM0tA9oeaNiVHIpux07J440AwX8EW1cmOPPI"
+        "Ref": "QueryUserCreatedAtIndexLambdaVersionruHCf8hGzHiR3F52ZEBtYFG7jF4iFkvqoZt8nPSoJkA"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-QueryUserCreatedAtIndexLambdaFunctionQualifiedArn"
@@ -1238,10 +1318,19 @@
     "ScanUserCreatedAtIndexLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ScanUserCreatedAtIndexLambdaVersiongVFtzCT7IODLViDDFOyqgyRMTPUQz4DXk4jeLsD4"
+        "Ref": "ScanUserCreatedAtIndexLambdaVersionxnqeb5mO1JrhenEIDB0f0FbIotgKVaDGw2xCFpHm4"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-ScanUserCreatedAtIndexLambdaFunctionQualifiedArn"
+      }
+    },
+    "NotifyUserLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "NotifyUserLambdaVersiony35OHZlKqwdEtY54ee9UliOspr3o3PwGIbKNULGrQqM"
+      },
+      "Export": {
+        "Name": "sls-serverless-dynamodb-dev-NotifyUserLambdaFunctionQualifiedArn"
       }
     },
     "ServiceEndpoint": {

@@ -136,3 +136,22 @@ export const scanUserCreatedAtIndex = async (event) => {
     return { ...error, body: JSON.stringify(err) };
   }
 };
+
+export const notifyUser = async (event) => {
+  console.log("DynamoDB Stream Event:", JSON.stringify(event, null, 2));
+
+  for (const record of event.Records) {
+    console.log("Stream record:", JSON.stringify(record, null, 2));
+
+    if (record.eventName === "INSERT") {
+      const newItem = record.dynamodb.NewImage;
+      console.log("New item added:", { newItem });
+    }
+
+    if (record.eventName === "MODIFY") {
+      const oldItem = record.dynamodb.OldImage;
+      const newItem = record.dynamodb.NewImage;
+      console.log("Item modified:", { oldItem, newItem });
+    }
+  }
+};
