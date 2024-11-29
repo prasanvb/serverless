@@ -136,3 +136,14 @@ event: {
 - For libraries that return a promise, you can return that promise directly to the runtime
   - `return s3.listBuckets().promise()`
 - When you designate code as an ES module, you can use the await keyword at the top level of code.
+
+## Dynamodb
+
+- For items with a given partition key value, DynamoDB stores these items close together, in sorted order by sort key value.
+
+### Query Operations
+
+- In a Query operation, DynamoDB retrieves the items in sorted order, and then processes the items using KeyConditionExpression and any FilterExpression that might be present. Only then are the Query results sent back to the client.
+- A Query operation always returns a result set. If no matching items are found, the result set is empty.
+- Query results are always sorted by the sort key value. If the data type of the sort key is Number, the results are returned in numeric order. Otherwise, the results are returned in order of UTF-8 bytes. By default, the sort order is ascending. To reverse the order, set the ScanIndexForward parameter to false.
+- A single Query operation can retrieve a maximum of 1 MB of data.

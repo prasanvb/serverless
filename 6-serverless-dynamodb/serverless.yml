@@ -42,12 +42,23 @@ functions:
           method: get
           cors: true
     role: customRole
+  # https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user/query
   queryUsers:
     handler: functions/user/handler.queryUsers
     description: "Query user table"
     events:
       - http:
           path: user/query
+          method: post
+          cors: true
+    role: customRole
+  # https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user/query/index
+  queryUserCreatedAtIndex:
+    handler: functions/user/handler.queryUserCreatedAtIndex
+    description: "Query user by createAtIndex"
+    events:
+      - http:
+          path: user/query/index
           method: post
           cors: true
     role: customRole
@@ -60,6 +71,9 @@ custom:
 
 resources:
   Resources:
+    # Create a table with name "UsersTable" and Global Secondary Index "createdAtIndex" 
+    # email, country and createdAt are initial attributes and you can add more attributes in the putItem because dynamoDB is un-structured document 
+    # email is declared primary Key/partition key 
     UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -72,6 +86,7 @@ resources:
           - AttributeName: createdAt
             AttributeType: S
         KeySchema:
+          # Partition Key
           - AttributeName: email
             KeyType: HASH
         BillingMode: PROVISIONED
@@ -81,8 +96,10 @@ resources:
         GlobalSecondaryIndexes:
           - IndexName: createdAtIndex
             KeySchema:
+              # Partition Key
               - AttributeName: country
                 KeyType: HASH
+              # Sort Key
               - AttributeName: createdAt
                 KeyType: RANGE
             Projection: 
@@ -131,7 +148,7 @@ resources:
                     - "dynamodb:GetItem"
                     - "dynamodb:Query"
                   Resource: 
-                  # Allow querying the base table and the GSI
+                  # Allow querying the base table and the Global Secondary Index
                   # arn:aws:dynamodb:us-west-2:123456789012:table/YourTableName/index/YourGSIName
                     - "arn:aws:dynamodb:*:*:table/*"
                     - "arn:aws:dynamodb:*:*:table/*/index/*"

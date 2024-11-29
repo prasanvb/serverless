@@ -112,6 +112,12 @@
               "LogGroupName": "/aws/lambda/serverless-dynamodb-dev-queryUsers"
             }
           },
+          "QueryUserCreatedAtIndexLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/serverless-dynamodb-dev-queryUserCreatedAtIndex"
+            }
+          },
           "CreateUserLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -119,7 +125,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-dynamodb/dev/1732777349578-2024-11-28T07:02:29.578Z/serverless-dynamodb.zip"
+                "S3Key": "serverless/serverless-dynamodb/dev/1732849224633-2024-11-29T03:00:24.633Z/serverless-dynamodb.zip"
               },
               "Handler": "functions/user/handler.createUser",
               "Runtime": "nodejs18.x",
@@ -151,7 +157,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-dynamodb/dev/1732777349578-2024-11-28T07:02:29.578Z/serverless-dynamodb.zip"
+                "S3Key": "serverless/serverless-dynamodb/dev/1732849224633-2024-11-29T03:00:24.633Z/serverless-dynamodb.zip"
               },
               "Handler": "functions/user/handler.getUser",
               "Runtime": "nodejs18.x",
@@ -183,7 +189,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-dynamodb/dev/1732777349578-2024-11-28T07:02:29.578Z/serverless-dynamodb.zip"
+                "S3Key": "serverless/serverless-dynamodb/dev/1732849224633-2024-11-29T03:00:24.633Z/serverless-dynamodb.zip"
               },
               "Handler": "functions/user/handler.queryUsers",
               "Runtime": "nodejs18.x",
@@ -208,37 +214,80 @@
               "customRole"
             ]
           },
-          "CreateUserLambdaVersionUYM5barPtz5idTgFJzwhAO5MB61SMZvISBN5RWw34": {
+          "QueryUserCreatedAtIndexLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/serverless-dynamodb/dev/1732849224633-2024-11-29T03:00:24.633Z/serverless-dynamodb.zip"
+              },
+              "Handler": "functions/user/handler.queryUserCreatedAtIndex",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "serverless-dynamodb-dev-queryUserCreatedAtIndex",
+              "MemorySize": 512,
+              "Timeout": 30,
+              "Description": "Query user by createAtIndex",
+              "Environment": {
+                "Variables": {
+                  "USERS_TABLE": "usersTable-dev"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "customRole",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "QueryUserCreatedAtIndexLogGroup",
+              "customRole"
+            ]
+          },
+          "CreateUserLambdaVersionP6SfMvc3HowUBLVb5fxBFx3BALsrburIwo651mlZl4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateUserLambdaFunction"
               },
-              "CodeSha256": "ytF1F0nTADxhwwtZ7RoLYf3EMdhbaWp7IU3RXcHelxg=",
+              "CodeSha256": "bAZF37wfId9JV/H516aCpyeX270KGc94iYMmFtGX4CQ=",
               "Description": "Create a new user"
             }
           },
-          "GetUserLambdaVersionNNAwnzMwpJwDDRLWJa0AZDTpav3oMQhZwhmLtJZCQU": {
+          "GetUserLambdaVersiondivEL6ewAXqMQ27mlbbrGohxYtmD5ke1zt2UZohOA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetUserLambdaFunction"
               },
-              "CodeSha256": "ytF1F0nTADxhwwtZ7RoLYf3EMdhbaWp7IU3RXcHelxg=",
+              "CodeSha256": "bAZF37wfId9JV/H516aCpyeX270KGc94iYMmFtGX4CQ=",
               "Description": "Get user by email"
             }
           },
-          "QueryUsersLambdaVersionJbtPUzlY30LSPgVMDJd6HeSIpKFPvkbt3aut2S0vJds": {
+          "QueryUsersLambdaVersionrQoDtt3j7a9H542fyLhSkDFxObesEeAzsJy6EWTMo0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "QueryUsersLambdaFunction"
               },
-              "CodeSha256": "ytF1F0nTADxhwwtZ7RoLYf3EMdhbaWp7IU3RXcHelxg=",
+              "CodeSha256": "bAZF37wfId9JV/H516aCpyeX270KGc94iYMmFtGX4CQ=",
               "Description": "Query user table"
+            }
+          },
+          "QueryUserCreatedAtIndexLambdaVersionWKO7M41ZSW7w4mAkdapXoA1l3v7iRJx7V5WnxbMsg": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "QueryUserCreatedAtIndexLambdaFunction"
+              },
+              "CodeSha256": "bAZF37wfId9JV/H516aCpyeX270KGc94iYMmFtGX4CQ=",
+              "Description": "Query user by createAtIndex"
             }
           },
           "ApiGatewayRestApi": {
@@ -287,6 +336,18 @@
                 "Ref": "ApiGatewayResourceUser"
               },
               "PathPart": "query",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceUserQueryIndex": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceUserQuery"
+              },
+              "PathPart": "index",
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -421,6 +482,51 @@
               },
               "ResourceId": {
                 "Ref": "ApiGatewayResourceUserQuery"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodUserQueryIndexOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceUserQueryIndex"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
@@ -565,7 +671,53 @@
               "QueryUsersLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1732777344013": {
+          "ApiGatewayMethodUserQueryIndexPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceUserQueryIndex"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "QueryUserCreatedAtIndexLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "QueryUserCreatedAtIndexLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1732849219752": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -577,9 +729,11 @@
               "ApiGatewayMethodUserOptions",
               "ApiGatewayMethodUserEmailVarOptions",
               "ApiGatewayMethodUserQueryOptions",
+              "ApiGatewayMethodUserQueryIndexOptions",
               "ApiGatewayMethodUserPost",
               "ApiGatewayMethodUserEmailVarGet",
-              "ApiGatewayMethodUserQueryPost"
+              "ApiGatewayMethodUserQueryPost",
+              "ApiGatewayMethodUserQueryIndexPost"
             ]
           },
           "CreateUserLambdaPermissionApiGateway": {
@@ -662,6 +816,43 @@
               "FunctionName": {
                 "Fn::GetAtt": [
                   "QueryUsersLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "QueryUserCreatedAtIndexLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "QueryUserCreatedAtIndexLambdaFunction",
                   "Arn"
                 ]
               },
@@ -831,7 +1022,7 @@
           "CreateUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateUserLambdaVersionUYM5barPtz5idTgFJzwhAO5MB61SMZvISBN5RWw34"
+              "Ref": "CreateUserLambdaVersionP6SfMvc3HowUBLVb5fxBFx3BALsrburIwo651mlZl4"
             },
             "Export": {
               "Name": "sls-serverless-dynamodb-dev-CreateUserLambdaFunctionQualifiedArn"
@@ -840,7 +1031,7 @@
           "GetUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetUserLambdaVersionNNAwnzMwpJwDDRLWJa0AZDTpav3oMQhZwhmLtJZCQU"
+              "Ref": "GetUserLambdaVersiondivEL6ewAXqMQ27mlbbrGohxYtmD5ke1zt2UZohOA"
             },
             "Export": {
               "Name": "sls-serverless-dynamodb-dev-GetUserLambdaFunctionQualifiedArn"
@@ -849,10 +1040,19 @@
           "QueryUsersLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "QueryUsersLambdaVersionJbtPUzlY30LSPgVMDJd6HeSIpKFPvkbt3aut2S0vJds"
+              "Ref": "QueryUsersLambdaVersionrQoDtt3j7a9H542fyLhSkDFxObesEeAzsJy6EWTMo0"
             },
             "Export": {
               "Name": "sls-serverless-dynamodb-dev-QueryUsersLambdaFunctionQualifiedArn"
+            }
+          },
+          "QueryUserCreatedAtIndexLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "QueryUserCreatedAtIndexLambdaVersionWKO7M41ZSW7w4mAkdapXoA1l3v7iRJx7V5WnxbMsg"
+            },
+            "Export": {
+              "Name": "sls-serverless-dynamodb-dev-QueryUserCreatedAtIndexLambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -1011,7 +1211,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CreateUserLambdaVersionUYM5barPtz5idTgFJzwhAO5MB61SMZvISBN5RWw34"
+        "versionLogicalId": "CreateUserLambdaVersionP6SfMvc3HowUBLVb5fxBFx3BALsrburIwo651mlZl4"
       },
       "getUser": {
         "handler": "functions/user/handler.getUser",
@@ -1049,7 +1249,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetUserLambdaVersionNNAwnzMwpJwDDRLWJa0AZDTpav3oMQhZwhmLtJZCQU"
+        "versionLogicalId": "GetUserLambdaVersiondivEL6ewAXqMQ27mlbbrGohxYtmD5ke1zt2UZohOA"
       },
       "queryUsers": {
         "handler": "functions/user/handler.queryUsers",
@@ -1087,7 +1287,45 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "QueryUsersLambdaVersionJbtPUzlY30LSPgVMDJd6HeSIpKFPvkbt3aut2S0vJds"
+        "versionLogicalId": "QueryUsersLambdaVersionrQoDtt3j7a9H542fyLhSkDFxObesEeAzsJy6EWTMo0"
+      },
+      "queryUserCreatedAtIndex": {
+        "handler": "functions/user/handler.queryUserCreatedAtIndex",
+        "description": "Query user by createAtIndex",
+        "events": [
+          {
+            "http": {
+              "path": "user/query/index",
+              "method": "post",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "role": "customRole",
+        "name": "serverless-dynamodb-dev-queryUserCreatedAtIndex",
+        "package": {},
+        "memory": 512,
+        "timeout": 30,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "QueryUserCreatedAtIndexLambdaVersionWKO7M41ZSW7w4mAkdapXoA1l3v7iRJx7V5WnxbMsg"
       }
     },
     "resources": {
@@ -1246,7 +1484,7 @@
     "artifact": "/Users/prasanv/repos/serverless/6-serverless-dynamodb/.serverless/serverless-dynamodb.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/serverless-dynamodb/dev/1732777349578-2024-11-28T07:02:29.578Z",
+    "artifactDirectoryName": "serverless/serverless-dynamodb/dev/1732849224633-2024-11-29T03:00:24.633Z",
     "artifact": "serverless-dynamodb.zip"
   }
 }

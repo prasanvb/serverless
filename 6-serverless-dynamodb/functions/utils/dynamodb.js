@@ -94,9 +94,52 @@ export const queryUserRecords = async (item, tableName) => {
 
     console.log("queryUserRecords Items:", items);
 
-    return { Item: items, ConsumedCapacity: response.ConsumedCapacity };
+    return { ...response, Items: items };
   } catch (error) {
     console.error("Error querying items by attribute:", error);
+    throw error;
+  }
+};
+
+export const queryByCreatedAtIndex = async (item, tableName) => {
+  const { createdAt, country, firstname } = item;
+
+  console.log({ createdAt, country, firstname });
+
+  const params = firstname
+    ? {
+        TableName: tableName,
+        IndexName: "createdAtIndex",
+        KeyConditionExpression: "country = :country AND createdAt > :createdAt",
+        FilterExpression: "begins_with(firstname, :firstname)",
+        ExpressionAttributeValues: {
+          ":createdAt": { S: createdAt },
+          ":country": { S: country },
+          ":firstname": { S: firstname },
+        },
+        ReturnConsumedCapacity: "TOTAL",
+      }
+    : {
+        TableName: tableName,
+        IndexName: "createdAtIndex",
+        KeyConditionExpression: "country = :country AND createdAt > :createdAt",
+        ExpressionAttributeValues: {
+          ":createdAt": { S: createdAt },
+          ":country": { S: country },
+        },
+        ReturnConsumedCapacity: "TOTAL",
+      };
+
+  try {
+    const command = new QueryCommand(params);
+    const response = await client.send(command);
+    const items = response.Items?.map((item) => unmarshall(item)) || [];
+
+    console.log("queryUserCreatedAtIndex:", items);
+
+    return { ...response, Items: items };
+  } catch (error) {
+    console.error("Error querying items by Global Secondary Index:", JSON.stringify(error, null, 2));
     throw error;
   }
 };

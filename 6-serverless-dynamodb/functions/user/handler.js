@@ -1,5 +1,5 @@
 import { success, error } from "../utils/response.js";
-import { createUserRecord, getUserRecord, queryUserRecords } from "../utils/dynamodb.js";
+import { createUserRecord, getUserRecord, queryUserRecords, queryByCreatedAtIndex } from "../utils/dynamodb.js";
 
 export const createUser = async (event) => {
   const { USERS_TABLE } = process.env;
@@ -77,6 +77,31 @@ export const queryUsers = async (event) => {
     return { ...success, body: JSON.stringify(res) };
   } catch (err) {
     console.error("queryUserRecords error", { err });
+    return { ...error, body: JSON.stringify(err) };
+  }
+};
+
+export const queryUserCreatedAtIndex = async (event) => {
+  const { USERS_TABLE } = process.env;
+  const body = JSON.parse(event?.body);
+
+  if (!body) {
+    return {
+      ...error,
+      body: JSON.stringify({
+        message: "queryUserCreatedAtIndex event body data invalid",
+      }),
+    };
+  }
+
+  try {
+    const res = await queryByCreatedAtIndex(body, USERS_TABLE);
+
+    console.log("queryByCreatedAtIndex response", { res });
+
+    return { ...success, body: JSON.stringify(res) };
+  } catch (err) {
+    console.error("queryByCreatedAtIndex error", { err });
     return { ...error, body: JSON.stringify(err) };
   }
 };
