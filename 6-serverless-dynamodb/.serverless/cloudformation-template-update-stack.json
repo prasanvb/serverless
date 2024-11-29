@@ -114,7 +114,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732865410427-2024-11-29T07:30:10.427Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732865651661-2024-11-29T07:34:11.661Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.createUser",
         "Runtime": "nodejs18.x",
@@ -147,7 +147,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732865410427-2024-11-29T07:30:10.427Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732865651661-2024-11-29T07:34:11.661Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.getUser",
         "Runtime": "nodejs18.x",
@@ -180,7 +180,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732865410427-2024-11-29T07:30:10.427Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732865651661-2024-11-29T07:34:11.661Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.queryUsers",
         "Runtime": "nodejs18.x",
@@ -213,7 +213,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732865410427-2024-11-29T07:30:10.427Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732865651661-2024-11-29T07:34:11.661Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.queryUserCreatedAtIndex",
         "Runtime": "nodejs18.x",
@@ -246,7 +246,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732865410427-2024-11-29T07:30:10.427Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732865651661-2024-11-29T07:34:11.661Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.scanUserCreatedAtIndex",
         "Runtime": "nodejs18.x",
@@ -279,7 +279,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/serverless-dynamodb/dev/1732865410427-2024-11-29T07:30:10.427Z/serverless-dynamodb.zip"
+          "S3Key": "serverless/serverless-dynamodb/dev/1732865651661-2024-11-29T07:34:11.661Z/serverless-dynamodb.zip"
         },
         "Handler": "functions/user/handler.notifyUser",
         "Runtime": "nodejs18.x",
@@ -305,69 +305,69 @@
         "customLambdaExecutionRole"
       ]
     },
-    "CreateUserLambdaVersionLqtgj6z35TL7jx1CaM2pTpX2Sh744kh8pxJD5zcMSc": {
+    "CreateUserLambdaVersionh2UAzHKXvDsIOEhilOsHYlGrBtpOag4VuggssojTul0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateUserLambdaFunction"
         },
-        "CodeSha256": "AIYjRzuFxP2gMOAz+S3+/HnUR9dxf69m6QQu2Ni1isk=",
+        "CodeSha256": "kpr0ggGuHUOpW7o90Whi6P5TORlo2mbDIAUgpOC8awI=",
         "Description": "Create a new user"
       }
     },
-    "GetUserLambdaVersionrePO7TFwd6NlwHcJIimtftWTPILick0AVBIWpI6YoyU": {
+    "GetUserLambdaVersionEfQQq160qNXWPuOLN6fcrhbnkeUXpJdDaQXMSxdk3ZE": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetUserLambdaFunction"
         },
-        "CodeSha256": "AIYjRzuFxP2gMOAz+S3+/HnUR9dxf69m6QQu2Ni1isk=",
+        "CodeSha256": "kpr0ggGuHUOpW7o90Whi6P5TORlo2mbDIAUgpOC8awI=",
         "Description": "Get user by email"
       }
     },
-    "QueryUsersLambdaVersionZTiS36txcwxyZrm3jE6VQ16v9kBEPAYSo6I9jPcnaI": {
+    "QueryUsersLambdaVersion7N1KiIfR7ymEZG0Wtmy9I2QKMzt9dncg40h3wD7w": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "QueryUsersLambdaFunction"
         },
-        "CodeSha256": "AIYjRzuFxP2gMOAz+S3+/HnUR9dxf69m6QQu2Ni1isk=",
+        "CodeSha256": "kpr0ggGuHUOpW7o90Whi6P5TORlo2mbDIAUgpOC8awI=",
         "Description": "Query user table"
       }
     },
-    "QueryUserCreatedAtIndexLambdaVersionhXemwQ8R75cgdFvgC0aKPgD3bWXPDgzxtDqvbi9ws": {
+    "QueryUserCreatedAtIndexLambdaVersiondthdvRs4oWxCkEamE8yCBgogmRblCfYdtQBfqXRXOI": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "QueryUserCreatedAtIndexLambdaFunction"
         },
-        "CodeSha256": "AIYjRzuFxP2gMOAz+S3+/HnUR9dxf69m6QQu2Ni1isk=",
+        "CodeSha256": "kpr0ggGuHUOpW7o90Whi6P5TORlo2mbDIAUgpOC8awI=",
         "Description": "Query user by createAtIndex"
       }
     },
-    "ScanUserCreatedAtIndexLambdaVersionRdYbwLChNrb0ggGx8cuTLS8vGCEjmG1LHksqa7vBA4": {
+    "ScanUserCreatedAtIndexLambdaVersionfqmrXXxdFFVJhcDyOzeCXIdWsJUYPhRhUkEveGjM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ScanUserCreatedAtIndexLambdaFunction"
         },
-        "CodeSha256": "AIYjRzuFxP2gMOAz+S3+/HnUR9dxf69m6QQu2Ni1isk=",
+        "CodeSha256": "kpr0ggGuHUOpW7o90Whi6P5TORlo2mbDIAUgpOC8awI=",
         "Description": "Scan user by createAtIndex"
       }
     },
-    "NotifyUserLambdaVersionPjKGQ0MzfAv40S6pq8lZXBsNeMDa3i5kfEC9rTJIG8": {
+    "NotifyUserLambdaVersionV7bF4QfpBT6iAeLYDYwSUVELHR6D7rUFTJxSYhFaL3I": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "NotifyUserLambdaFunction"
         },
-        "CodeSha256": "AIYjRzuFxP2gMOAz+S3+/HnUR9dxf69m6QQu2Ni1isk=",
+        "CodeSha256": "kpr0ggGuHUOpW7o90Whi6P5TORlo2mbDIAUgpOC8awI=",
         "Description": "Notify user with an email"
       }
     },
@@ -913,7 +913,7 @@
         "ScanUserCreatedAtIndexLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1732865404861": {
+    "ApiGatewayDeployment1732865645913": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1296,7 +1296,7 @@
     "CreateUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateUserLambdaVersionLqtgj6z35TL7jx1CaM2pTpX2Sh744kh8pxJD5zcMSc"
+        "Ref": "CreateUserLambdaVersionh2UAzHKXvDsIOEhilOsHYlGrBtpOag4VuggssojTul0"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-CreateUserLambdaFunctionQualifiedArn"
@@ -1305,7 +1305,7 @@
     "GetUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetUserLambdaVersionrePO7TFwd6NlwHcJIimtftWTPILick0AVBIWpI6YoyU"
+        "Ref": "GetUserLambdaVersionEfQQq160qNXWPuOLN6fcrhbnkeUXpJdDaQXMSxdk3ZE"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-GetUserLambdaFunctionQualifiedArn"
@@ -1314,7 +1314,7 @@
     "QueryUsersLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "QueryUsersLambdaVersionZTiS36txcwxyZrm3jE6VQ16v9kBEPAYSo6I9jPcnaI"
+        "Ref": "QueryUsersLambdaVersion7N1KiIfR7ymEZG0Wtmy9I2QKMzt9dncg40h3wD7w"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-QueryUsersLambdaFunctionQualifiedArn"
@@ -1323,7 +1323,7 @@
     "QueryUserCreatedAtIndexLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "QueryUserCreatedAtIndexLambdaVersionhXemwQ8R75cgdFvgC0aKPgD3bWXPDgzxtDqvbi9ws"
+        "Ref": "QueryUserCreatedAtIndexLambdaVersiondthdvRs4oWxCkEamE8yCBgogmRblCfYdtQBfqXRXOI"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-QueryUserCreatedAtIndexLambdaFunctionQualifiedArn"
@@ -1332,7 +1332,7 @@
     "ScanUserCreatedAtIndexLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ScanUserCreatedAtIndexLambdaVersionRdYbwLChNrb0ggGx8cuTLS8vGCEjmG1LHksqa7vBA4"
+        "Ref": "ScanUserCreatedAtIndexLambdaVersionfqmrXXxdFFVJhcDyOzeCXIdWsJUYPhRhUkEveGjM"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-ScanUserCreatedAtIndexLambdaFunctionQualifiedArn"
@@ -1341,7 +1341,7 @@
     "NotifyUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "NotifyUserLambdaVersionPjKGQ0MzfAv40S6pq8lZXBsNeMDa3i5kfEC9rTJIG8"
+        "Ref": "NotifyUserLambdaVersionV7bF4QfpBT6iAeLYDYwSUVELHR6D7rUFTJxSYhFaL3I"
       },
       "Export": {
         "Name": "sls-serverless-dynamodb-dev-NotifyUserLambdaFunctionQualifiedArn"
