@@ -180,3 +180,10 @@ event: {
 - A Query operation always returns a result set. If no matching items are found, the result set is empty.
 - Query results are always sorted by the sort key value. If the data type of the sort key is Number, the results are returned in numeric order. Otherwise, the results are returned in order of UTF-8 bytes. By default, the sort order is ascending. To reverse the order, set the ScanIndexForward parameter to false.
 - A single Query operation can retrieve a maximum of 1 MB of data.
+
+### Streams
+
+- DynamoDB Stream events have specific event names that indicate the type of operation that triggered the stream.
+  - `INSERT`:Triggered when a new item is added to the table.
+  - `MODIFY`: Triggered when an existing item is updated.
+  - `REMOVE`: Triggered when an existing item is deleted from the table.

@@ -6,6 +6,7 @@ import {
   queryByCreatedAtIndex,
   scanCreatedAtIndex,
 } from "../utils/dynamodb.js";
+import { sendRawEmail } from "../utils/email.js";
 
 export const createUser = async (event) => {
   const { USERS_TABLE } = process.env;
@@ -143,15 +144,49 @@ export const notifyUser = async (event) => {
   for (const record of event.Records) {
     console.log("Stream record:", JSON.stringify(record, null, 2));
 
+    const oldItem = record.dynamodb.OldImage;
+    const newItem = record.dynamodb.NewImage;
+
+    const { firstname, lastname, email } = newItem;
+    const emailId = email.S;
+    const subject = "DynamoDB stream event notification";
+    const emailBody = `Hello ${firstname.S} ${lastname.S}, 
+    
+    ${record.eventName} event was successful.
+      
+    Regards
+    AWS SES `;
+
     if (record.eventName === "INSERT") {
-      const newItem = record.dynamodb.NewImage;
       console.log("New item added:", { newItem });
+
+      try {
+        const res = await sendRawEmail(emailId, subject, emailBody);
+
+        console.log("INSERT event, notifyUser response", { res });
+
+        return { ...success, body: JSON.stringify(res) };
+      } catch (error) {
+        console.error("INSERT event, notifyUser error", { err });
+
+        return { ...error, body: JSON.stringify(err) };
+      }
     }
 
     if (record.eventName === "MODIFY") {
-      const oldItem = record.dynamodb.OldImage;
-      const newItem = record.dynamodb.NewImage;
       console.log("Item modified:", { oldItem, newItem });
+
+      try {
+        const res = await sendRawEmail(emailId, subject, emailBody);
+
+        console.log("MODIFY event, notifyUser response", { res });
+
+        return { ...success, body: JSON.stringify(res) };
+      } catch (error) {
+        console.error("MODIFY event, notifyUser error", { err });
+
+        return { ...error, body: JSON.stringify(err) };
+      }
     }
   }
 };
