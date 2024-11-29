@@ -4,6 +4,7 @@ import {
   PutItemCommand,
   GetItemCommand,
   QueryCommand,
+  ScanCommand,
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall, marshall } from "@aws-sdk/util-dynamodb";
 
@@ -104,8 +105,6 @@ export const queryUserRecords = async (item, tableName) => {
 export const queryByCreatedAtIndex = async (item, tableName) => {
   const { createdAt, country, firstname } = item;
 
-  console.log({ createdAt, country, firstname });
-
   const params = firstname
     ? {
         TableName: tableName,
@@ -140,6 +139,35 @@ export const queryByCreatedAtIndex = async (item, tableName) => {
     return { ...response, Items: items };
   } catch (error) {
     console.error("Error querying items by Global Secondary Index:", JSON.stringify(error, null, 2));
+    throw error;
+  }
+};
+
+export const scanCreatedAtIndex = async (item, tableName) => {
+  const { createdAt, country, firstname } = item;
+
+  const params = {
+    TableName: tableName,
+    IndexName: "createdAtIndex",
+    FilterExpression: "country = :country AND createdAt > :createdAt AND begins_with(firstname, :firstname)",
+    ExpressionAttributeValues: {
+      ":createdAt": { S: createdAt },
+      ":country": { S: country },
+      ":firstname": { S: firstname },
+    },
+    ReturnConsumedCapacity: "TOTAL",
+  };
+
+  try {
+    const command = new ScanCommand(params);
+    const response = await client.send(command);
+    const items = response.Items?.map((item) => unmarshall(item)) || [];
+
+    console.log("scanCreatedAtIndex:", items);
+
+    return { ...response, Items: items };
+  } catch (error) {
+    console.error("Error scanning items by Global Secondary Index:", JSON.stringify(error, null, 2));
     throw error;
   }
 };

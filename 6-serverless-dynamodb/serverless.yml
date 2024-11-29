@@ -62,6 +62,16 @@ functions:
           method: post
           cors: true
     role: customRole
+  # https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user/scan/index
+  scanUserCreatedAtIndex:
+    handler: functions/user/handler.scanUserCreatedAtIndex
+    description: "Scan user by createAtIndex"
+    events:
+      - http:
+          path: user/scan/index
+          method: post
+          cors: true
+    role: customRole
 
 plugins:
   - serverless-offline
