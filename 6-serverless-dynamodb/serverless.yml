@@ -22,7 +22,6 @@ provider:
       executionLogging: false
 
 functions:
-  # url: https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user
   createUser:
     handler: functions/user/handler.createUser
     description: "Create a new user"
@@ -32,7 +31,6 @@ functions:
           method: post
           cors: true
     role: customRole
-  # https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user/prasan@gmail.com
   getUser:
     handler: functions/user/handler.getUser
     description: "Get user by email"
@@ -116,12 +114,14 @@ resources:
               ProjectionType: ALL
             ProvisionedThroughput:
               ReadCapacityUnits: 5
-              WriteCapacityUnits: 10    
+              WriteCapacityUnits: 10
+    # Custom role is created and its assumed by lambda
+    # Policy attached has 2 statements - create log group and log events and perform actions on dynamodb tables and indexes 
     customRole: 
       Type: "AWS::IAM::Role"
       Properties:
         Path: "/"
-        RoleName: "LambdaDynamoDBFullAccessRole"
+        RoleName: "LambdaExecutionRole"
         AssumeRolePolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -132,7 +132,7 @@ resources:
               Action:
                 - "sts:AssumeRole"
         Policies:
-          - PolicyName: "LambdaDynamoDBFullAccess"
+          - PolicyName: "LambdaLogGroupAndDynamoDBFullAccess"
             PolicyDocument:
               Version: "2012-10-17"
               Statement:
@@ -152,11 +152,11 @@ resources:
                         - "log-group:/aws/lambda/*:*:*"
                 - Effect: "Allow"
                   Action:
-                    - "dynamodb:*"  
                     - "dynamodb:ListTables"
                     - "dynamodb:PutItem"
                     - "dynamodb:GetItem"
                     - "dynamodb:Query"
+                    - "dynamodb:Scan"
                   Resource: 
                   # Allow querying the base table and the Global Secondary Index
                   # arn:aws:dynamodb:us-west-2:123456789012:table/YourTableName/index/YourGSIName

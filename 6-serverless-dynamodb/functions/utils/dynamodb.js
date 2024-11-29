@@ -59,8 +59,6 @@ export const createUserRecord = async (item, tableName) => {
     Item: marshall(data),
   };
 
-  console.log({ params });
-
   try {
     const command = new PutItemCommand(params);
     const response = await client.send(command);

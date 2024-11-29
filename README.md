@@ -137,6 +137,39 @@ event: {
   - `return s3.listBuckets().promise()`
 - When you designate code as an ES module, you can use the await keyword at the top level of code.
 
+### Functions
+
+- createUser
+
+  - POST: <https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user>
+  - payload
+
+    ```JSON
+      {
+        "email": "prasanna@gmail.com",
+        "username": "prasannab",
+        "password": "Asdf!234",
+        "firstname": "prasanna",
+        "lastname": "bala",
+        "country": "canada",
+        "zipcode": "QWE456",
+        "Gadgets": [
+         "phone",
+         "watch"
+        ],
+        "phone": 9876543211,
+        "martialStatus": true,
+        "identities": {
+         "gender": "male",
+         "color": "brown"
+        }
+      }
+    ```
+
+- getUser
+
+  - GET: <https://g07wtfh8a7.execute-api.us-west-2.amazonaws.com/dev/user/{email}>
+
 ## Dynamodb
 
 - For items with a given partition key value, DynamoDB stores these items close together, in sorted order by sort key value.
