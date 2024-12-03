@@ -8,12 +8,33 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs18.x
+  # Overriding default env var through CLI command
+  stage: ${opt:stage,  'dev'}
+  region: us-west-2
+  memorySize: 512
+  timeout: 20
+  environment:
+    # Env var globally declared under provider
+    TEST_VAR: "serverless yml global environment variable"
+    NESTED_TEST_VAR: serverless-yml-nested-environment-variable-${self:provider.stage}
+    OVERRIDING_TEST_VAR: serverless-yml-overriding-environment-variable-${opt:stage, self:provider.stage}
+    DB_USERNAME_PS: ${ssm:/db_username}
+    DECRYPTED_DB_PASSWORD_PS: ${ssm:/db_password}
+    ENCRYPTED_DB_PASSWORD_PS: ${ssm(noDecrypt):/db_password}
+    DB_ADMIN_USERNAME_JSON: ${self:custom.DB_ADMIN_SM.username}
+    DB_ADMIN_PASSWORD_JSON: ${self:custom.DB_ADMIN_SM.password}
+  
+custom:
+  DB_ADMIN_SM: ${ssm:/aws/reference/secretsmanager/db_admin}
 
 # The `functions` block defines what code to deploy
 functions:
   sample:
     handler: handler.sample
     # The `events` block defines how to trigger the handler.sample code
+    environment:
+      # Env var declared function specific
+      TEST_VAR_FS: "serverless yml function specific environment variable"
     events:
       - http:
           path: /
