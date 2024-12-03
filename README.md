@@ -1,6 +1,8 @@
-# Serverless
+# [Serverless](https://serverless.com/framework/docs/)
 
-- [serverless.yml example](0-aws-nodejs/serverless.yml)
+- [serverless.yml config details](0-aws-nodejs/serverless.yml)
+- [serverless.yml env var](5-serverless-env-vars/serverless.yml)
+- [serverless.yml dynamodb](6-serverless-dynamodb/serverless.yml)
 
 ## Handlers
 

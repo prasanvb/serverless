@@ -1,0 +1,21 @@
+
+# The `service` block is the name of the service
+service: service-5-serverless-env-vars
+
+frameworkVersion: "3"
+
+# The `provider` block defines where your service will be deployed
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+# The `functions` block defines what code to deploy
+functions:
+  sample:
+    handler: handler.sample
+    # The `events` block defines how to trigger the handler.sample code
+    events:
+      - http:
+          path: /
+          method: get
+          cors: true
