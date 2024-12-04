@@ -22,8 +22,17 @@ provider:
     DB_USERNAME_PS: ${ssm:/db_username}
     DECRYPTED_DB_PASSWORD_PS: ${ssm:/db_password}
     ENCRYPTED_DB_PASSWORD_PS: ${ssm(noDecrypt):/db_password}
+    STR_TO_BOOL: ${strToBool(${ssm:/ENABLE_DEBUG})}
     DB_ADMIN_USERNAME_JSON: ${self:custom.DB_ADMIN_SM.username}
     DB_ADMIN_PASSWORD_JSON: ${self:custom.DB_ADMIN_SM.password}
+    DEV_CONFIG_API_KEY: ${file(./config/config.dev.json):api_key}
+    PROD_CONFIG_API_KEY: ${file(./config/config.${opt:stage,'dev'}.json):api_key}
+    SLS_INSTANCE_ID: ${sls:instanceId}
+    AWS_ACCOUNT_ID: ${aws:accountId}
+    S3_VARIABLE: ${s3:slsvariables/envvar.txt}
+    # Accessing cloud formation stack output key and value
+    CF_SERVICE_ENDPOINT: ${cf:service-5-serverless-env-vars-${opt:stage,'dev'}.ServiceEndpoint}
+    
   
 custom:
   DB_ADMIN_SM: ${ssm:/aws/reference/secretsmanager/db_admin}

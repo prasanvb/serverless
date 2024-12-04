@@ -19,6 +19,13 @@ module.exports.sample = (event, context, callback) => {
       DB_ADMIN_PASSWORD_JSON: `${process.env.DB_ADMIN_PASSWORD_JSON}`,
       VAR_FROM_DOT_ENV_FILE: `${process.env.VAR_FROM_DOT_ENV_FILE}`,
       ENV_VAR_USING_PLUGIN: `${process.env.ENV_VAR_USING_PLUGIN}`,
+      DEV_CONFIG_API_KEY: `${process.env.DEV_CONFIG_API_KEY}`,
+      PROD_CONFIG_API_KEY: `${process.env.PROD_CONFIG_API_KEY}`,
+      SLS_INSTANCE_ID: `${process.env.SLS_INSTANCE_ID}`,
+      AWS_ACCOUNT_ID: `${process.env.AWS_ACCOUNT_ID}`,
+      S3_VARIABLE: `${process.env.S3_VARIABLE}`,
+      STR_TO_BOOL: `${process.env.STR_TO_BOOL}`,
+      CF_SERVICE_ENDPOINT: `${process.env.CF_SERVICE_ENDPOINT}`,
     }),
   };
 
