@@ -193,6 +193,8 @@ event: {
 ## SERVERLESS ENVIRONMENT VARIABLES
 
 - As of serverless framework version 3 the default setting is `useDotenv: true`
+- Serverless framework variable system - Reference Values in brackets `§{variableSource}`.
+- Recursively reference properties e.g: `${ssm:FE_URL-${opt:stage}}`
 
   - NOTE:
     - not required to explicitly declare it
