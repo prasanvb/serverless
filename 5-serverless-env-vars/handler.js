@@ -1,4 +1,4 @@
-"use strict";
+require("dotenv").config();
 
 module.exports.sample = (event, context, callback) => {
   const response = {
@@ -17,6 +17,8 @@ module.exports.sample = (event, context, callback) => {
       ENCRYPTED_DB_PASSWORD_PS: `${process.env.ENCRYPTED_DB_PASSWORD_PS}`,
       DB_ADMIN_USERNAME_JSON: `${process.env.DB_ADMIN_USERNAME_JSON}`,
       DB_ADMIN_PASSWORD_JSON: `${process.env.DB_ADMIN_PASSWORD_JSON}`,
+      VAR_FROM_DOT_ENV_FILE: `${process.env.VAR_FROM_DOT_ENV_FILE}`,
+      ENV_VAR_USING_PLUGIN: `${process.env.ENV_VAR_USING_PLUGIN}`,
     }),
   };
 

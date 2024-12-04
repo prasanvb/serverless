@@ -1,6 +1,7 @@
 
 # The `service` block is the name of the service
 service: service-5-serverless-env-vars
+useDotenv: true
 
 frameworkVersion: "3"
 
@@ -27,6 +28,9 @@ provider:
 custom:
   DB_ADMIN_SM: ${ssm:/aws/reference/secretsmanager/db_admin}
 
+plugins:
+  - serverless-dotenv-plugin
+
 # The `functions` block defines what code to deploy
 functions:
   sample:
@@ -35,6 +39,7 @@ functions:
     environment:
       # Env var declared function specific
       TEST_VAR_FS: "serverless yml function specific environment variable"
+      ENV_VAR_USING_PLUGIN: ${env:VAR_FROM_DOT_ENV_FILE}-${self:provider.name}
     events:
       - http:
           path: /

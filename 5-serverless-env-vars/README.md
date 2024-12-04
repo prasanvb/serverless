@@ -1,5 +1,11 @@
 # SERVERLESS ENVIRONMENT VARIABLES
 
+- As of serverless framework version 3 the default setting is `useDotenv: true`
+
+  - NOTE:
+    - not required to explicitly declare it
+    - Cannot be set to false
+
 - Environment variables declared in the serverless yml file
   - TEST_VAR: Env var globally declared under provider
   - TEST_VAR_FS: Env var declared function specific
@@ -17,7 +23,10 @@
     - ENCRYPTED_DB_PASSWORD_PS
 
 - AWS Secrets Manager - Easily rotate, manage, and retrieve secrets throughout their lifecycle
+
   - `aws secretsmanager create-secret --name db_admin --description "db password for admin" --secret-string "{\"username\":\"admin\",\"password\":\"admin-pass\"}"  --region us-west-2`
     - DB_ADMIN_SM
     - DB_ADMIN_USERNAME_JSON
     - DB_ADMIN_PASSWORD_JSON
+
+- Using DOT env file
