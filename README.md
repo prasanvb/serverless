@@ -93,6 +93,7 @@ event: {
 ```
 
 ### Sample Context Object REST API
+- When Lambda runs your function, it passes a context object to the handler. This object provides methods and properties that provide information about the invocation, function, and execution environment.
 
 ```js
   context: {
