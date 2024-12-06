@@ -10,90 +10,17 @@
 
   - Takes three arguments: event, context, callback
   - Events:
-    - contains information from the invoker (JSON)
-    - Structure varies for AWS services invoking function
+    - Contains JSON information from the invoker AWS services or trigger
+    - Event object structure differs based on the invoking AWS service or the event triggering it (i.e. each trigger like S3, SQS, etc., will have a different events objects)
     - <https://docs.aws.amazon.com/lambda/latest/dg/lambda-services.html>
   - Context:
-    - contains information about the invocation, function, and execution environment.
+    - Context object provides methods and properties that provide information about the invocation, function, and execution environment
     - <https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html>
   - Callback:
     - function that you can call in non-async handlers to send a response
     - Response compatible with JSON.stringify.
 
-### Sample Event Object REST API
-
-```js
-event: {
-  resource: '/user/{email}',
-  path: '/user/prasan@gmail.com',
-  httpMethod: 'GET',
-  headers: {
-    Accept: '*/*',
-    'CloudFront-Forwarded-Proto': 'https',
-    'CloudFront-Is-Desktop-Viewer': 'true',
-    'CloudFront-Is-Mobile-Viewer': 'false',
-    'CloudFront-Is-SmartTV-Viewer': 'false',
-    'CloudFront-Is-Tablet-Viewer': 'false',
-    'CloudFront-Viewer-ASN': '6327',
-    'CloudFront-Viewer-Country': 'CA',
-    'content-type': 'application/json',
-    Host: 'g07wtfh8a7.execute-api.us-west-2.amazonaws.com',
-    'User-Agent': 'insomnia/10.1.1',
-    Via: '2.0 68912b17b5637bcad753c663791ff7a6.cloudfront.net (CloudFront)',
-    'X-Amz-Cf-Id': 'V29Z-MCx11CO6HutWgo7J-N5Z4G_O9sHKH_qZqr0gExLas_tGimt9w==',
-    'X-Amzn-Trace-Id': 'Root=1-6747e2d3-3c59550b75dff2c320d008aa',
-    'X-Forwarded-For': '70.68.236.240, 3.172.4.20',
-    'X-Forwarded-Port': '443',
-    'X-Forwarded-Proto': 'https'
-  },
-  multiValueHeaders: {
-    Accept: [Array],
-    'CloudFront-Forwarded-Proto': [Array],
-    'CloudFront-Is-Desktop-Viewer': [Array],
-    'CloudFront-Is-Mobile-Viewer': [Array],
-    'CloudFront-Is-SmartTV-Viewer': [Array],
-    'CloudFront-Is-Tablet-Viewer': [Array],
-    'CloudFront-Viewer-ASN': [Array],
-    'CloudFront-Viewer-Country': [Array],
-    'content-type': [Array],
-    Host: [Array],
-    'User-Agent': [Array],
-    Via: [Array],
-    'X-Amz-Cf-Id': [Array],
-    'X-Amzn-Trace-Id': [Array],
-    'X-Forwarded-For': [Array],
-    'X-Forwarded-Port': [Array],
-    'X-Forwarded-Proto': [Array]
-  },
-  queryStringParameters: null,
-  multiValueQueryStringParameters: null,
-  pathParameters: { email: 'prasan@gmail.com' },
-  stageVariables: null,
-  requestContext: {
-    resourceId: 'vqdqzd',
-    resourcePath: '/user/{email}',
-    httpMethod: 'GET',
-    extendedRequestId: 'B8BhLE0zPHcEd2A=',
-    requestTime: '28/Nov/2024:03:26:11 +0000',
-    path: '/dev/user/prasan@gmail.com',
-    accountId: '980921714626',
-    protocol: 'HTTP/1.1',
-    stage: 'dev',
-    domainPrefix: 'g07wtfh8a7',
-    requestTimeEpoch: 1732764371922,
-    requestId: '88d53c03-755a-4358-90f0-1133fc543569',
-    identity: [Object],
-    domainName: 'g07wtfh8a7.execute-api.us-west-2.amazonaws.com',
-    deploymentId: 'e9k6g8',
-    apiId: 'g07wtfh8a7'
-  },
-  body: null,
-  isBase64Encoded: false
-}
-```
-
 ### Sample Context Object REST API
-- When Lambda runs your function, it passes a context object to the handler. This object provides methods and properties that provide information about the invocation, function, and execution environment.
 
 ```js
   context: {
@@ -116,7 +43,7 @@ event: {
 
 ### context.callbackWaitsForEmptyEventLoop
 
-- NOTE: `callbackWaitsForEmptyEventLoop` default `true`. So fucntion execution continues until event loop is empty or the function times out. Need to manually set it to false
+- NOTE: `callbackWaitsForEmptyEventLoop` default `true`. So function execution continues until event loop is empty or the function times out. Need to manually set it to false
 
   ```js
   const AWS = require('aws-sdk')
@@ -139,6 +66,23 @@ event: {
 - For libraries that return a promise, you can return that promise directly to the runtime
   - `return s3.listBuckets().promise()`
 - When you designate code as an ES module, you can use the await keyword at the top level of code.
+
+## Handler Response
+
+```JSON
+{
+    statusCode: 200,
+    isBase64Encoded: false
+    body: JSON.stringify({
+        processed: true,
+        result: data
+    }),
+}
+```
+
+- `processed: true` flag signifies that the business logic inside the Lambda function was executed successfully. This is especially useful in cases where `statusCode: 200` might be returned even for partial successes or warnings.
+- If your Lambda function returns plain text, JSON, or other non-binary content, you set `isBase64Encoded: false` (or omit the field entirely, as false is the default).
+- Base64 encoding is only needed when returning binary data (e.g., images, PDFs, or other non-text content).
 
 ### Functions
 
